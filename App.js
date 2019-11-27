@@ -12,7 +12,7 @@ const store = configureStore();
 const appStack = createStackNavigator(
   {
     Home: {screen: WelcomePage},
-    App: {screen: SelectPlace},
+    Places: {screen: SelectPlace},
   },
   {
     initialRouteName: 'Home',

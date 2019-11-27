@@ -13,7 +13,7 @@ export default class WelcomePage extends Component {
           <Button
             title="Select Places"
             color="#acb6bf"
-            onPress={() => this.props.navigation.navigate('App')}
+            onPress={() => this.props.navigation.navigate('Places')}
           />
         </View>
       </View>
