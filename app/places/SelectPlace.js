@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Button} from 'react-native';
 import TextForm from '../components/TextForm';
 
 import {connect} from 'react-redux';
@@ -7,6 +7,12 @@ import {connect} from 'react-redux';
 export class SelectPlace extends Component {
   state = {
     placeName: '',
+  };
+  _sharePlace = e => {
+    const newPlace = {
+      name: this.state.placeName,
+    };
+    console.log('newPlace :', newPlace);
   };
 
   render() {
@@ -17,8 +23,11 @@ export class SelectPlace extends Component {
         <Text style={styles.textTitle}> Here Select Places </Text>
         <View style={styles.containerForm}>
           <TextForm
+            type="text"
             onChangeText={text => this.setState({placeName: text})}
+            placeName={this.state.placeName}
             value={this.state.placeName}
+            placeholder="Pick the Name"
           />
         </View>
         <View>
@@ -29,7 +38,11 @@ export class SelectPlace extends Component {
         </View>
 
         <View>
-          <Text>Button Here</Text>
+          <Button
+            title="Share Place"
+            color="#5f8f9c"
+            onPress={this._sharePlace}
+          />
         </View>
       </View>
     );

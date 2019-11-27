@@ -4,8 +4,8 @@ import {Text, View, StyleSheet, TextInput} from 'react-native';
 class TextForm extends Component {
   render() {
     return (
-      <View style={[styles.container]} {...this.props}>
-        <TextInput> {this.props.value} </TextInput>
+      <View style={[styles.container]}>
+        <TextInput {...this.props} />
       </View>
     );
   }
