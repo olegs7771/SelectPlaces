@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import TextForm from '../components/TextForm';
+import MapLocation from './MapLocation';
 
 import {connect} from 'react-redux';
 
@@ -33,8 +34,11 @@ export class SelectPlace extends Component {
         <View>
           <Text>Choose Picture Here</Text>
         </View>
-        <View>
-          <Text>Choose Location Here</Text>
+        <View style={styles.containerMap}>
+          <View style={styles.containerText}>
+            <Text style={styles.text}>Choose Location Here</Text>
+          </View>
+          <MapLocation />
         </View>
 
         <View>
@@ -61,9 +65,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: '60%',
   },
+  containerMap: {
+    width: '80%',
+    borderWidth: 1,
+    marginTop: 10,
+  },
+  containerText: {
+    alignItems: 'center',
+
+    paddingVertical: 5,
+  },
   textTitle: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  text: {
+    fontSize: 16,
   },
 });
 
