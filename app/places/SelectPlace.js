@@ -4,6 +4,7 @@ import TextForm from '../components/TextForm';
 import MapLocation from './MapLocation';
 
 import {connect} from 'react-redux';
+import {addPlace} from '../../actions/placesAction';
 
 export class SelectPlace extends Component {
   constructor(props) {
@@ -36,8 +37,9 @@ export class SelectPlace extends Component {
   _sharePlace = e => {
     const newPlace = {
       name: this.state.placeName,
+      location: this.props.location,
     };
-    console.log('newPlace :', newPlace);
+    this.props.addPlace(newPlace);
   };
 
   render() {
@@ -120,8 +122,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  location: state.place.selectedPlace.location,
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {addPlace};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectPlace);

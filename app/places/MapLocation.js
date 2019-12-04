@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {selectLocation} from '../../actions/placesAction';
 import {
   Text,
   StyleSheet,
   View,
   Dimensions,
   PermissionsAndroid,
+  Button,
 } from 'react-native';
 
 import MapView from 'react-native-maps';
@@ -15,6 +18,7 @@ class MapLocation extends Component {
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     },
+    locationChoosen: false,
   };
   componentDidMount() {
     if (Platform.OS === 'android') {
@@ -63,8 +67,43 @@ class MapLocation extends Component {
       {enableHighAccuracy: true, timeout: 200000, maximumAge: 1000},
     );
   };
+  //Pick Location on the Map
+  _pickLocation = e => {
+    const {coordinate} = e.nativeEvent;
+    console.log('coordinate', coordinate);
+    this.map.animateToRegion({
+      ...this.state.focusedRegion,
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+    });
+
+    this.setState(prevState => {
+      return {
+        focusedRegion: {
+          ...prevState.focusedRegion,
+          latitude: coordinate.latitude,
+          longitude: coordinate.longitude,
+        },
+        locationChoosen: true,
+      };
+    });
+    const data = {
+      latitude: this.state.focusedRegion.latitude,
+      longitude: this.state.focusedRegion.longitude,
+      latitudeDelta: this.state.focusedRegion.latitudeDelta,
+      longitudeDelta: this.state.focusedRegion.longitudeDelta,
+    };
+    this.props.selectLocation(data);
+  };
 
   render() {
+    let marker;
+
+    if (this.state.locationChoosen) {
+      marker = <MapView.Marker coordinate={this.state.focusedRegion} />;
+    } else {
+      marker = null;
+    }
     console.log('this.state', this.state);
     if (this.state.focusedRegion.latitude) {
       return (
@@ -72,7 +111,13 @@ class MapLocation extends Component {
           <MapView
             initialRegion={this.state.focusedRegion}
             style={styles.map}
-          />
+            onPress={this._pickLocation}
+            ref={ref => (this.map = ref)}>
+            {marker}
+          </MapView>
+          {this.state.locationChoosen ? null : (
+            <Button title="Pick Location On Map" color="#92abd4" />
+          )}
         </View>
       );
     } else {
@@ -85,7 +130,7 @@ class MapLocation extends Component {
   }
 }
 
-export default MapLocation;
+export default connect(null, {selectLocation})(MapLocation);
 const styles = StyleSheet.create({
   container: {},
   map: {
