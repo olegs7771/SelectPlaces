@@ -10,16 +10,27 @@ export class SelectPlace extends Component {
     super(props);
     this.state = {
       placeName: '',
-      isLandScape: false,
+      respStyles: {
+        npContainerFlexDirection: 'column',
+        alignContent: 'flex-start',
+
+        formWidth: '100%',
+        pictureWidth: '100%',
+      },
     };
     Dimensions.addEventListener('change', dims => {
       console.log('dims.window.width', dims.window.width);
       console.log('dims.window.height', dims.window.height);
-      if (dims.window.width > dims.window.height) {
-        this.setState({
-          isLandScape: true,
-        });
-      }
+
+      this.setState({
+        respStyles: {
+          npContainerFlexDirection: dims.window.height > 500 ? 'column' : 'row',
+          formWidth: dims.window.height > 500 ? '100%' : '45%',
+          pictureWidth: dims.window.height > 500 ? '100%' : '45%',
+          alignContent:
+            dims.window.height > 500 ? 'flex-start' : 'space-between',
+        },
+      });
     });
   }
   _sharePlace = e => {
@@ -30,13 +41,20 @@ export class SelectPlace extends Component {
   };
 
   render() {
-    console.log('isLandScape', this.state.isLandScape);
+    console.log('this.state.respStyles', this.state.respStyles);
 
     return (
       <View style={styles.container}>
         <Text style={styles.textTitle}> Here Select Places </Text>
-        <View style={styles.container_Name_Picture}>
-          <View style={styles.containerForm}>
+        <View
+          style={{
+            width: '80%',
+            flexDirection: this.state.respStyles.npContainerFlexDirection,
+            borderWidth: 1,
+            justifyContent: this.state.respStyles.alignContent,
+          }}>
+          <View
+            style={{borderWidth: 1, width: this.state.respStyles.formWidth}}>
             <TextForm
               type="text"
               onChangeText={text => this.setState({placeName: text})}
@@ -45,7 +63,8 @@ export class SelectPlace extends Component {
               placeholder="Pick the Name"
             />
           </View>
-          <View style={styles.containerPicture}>
+          <View
+            style={{borderWidth: 1, width: this.state.respStyles.pictureWidth}}>
             <Text>Choose Picture Here</Text>
           </View>
         </View>
@@ -76,22 +95,11 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     alignItems: 'center',
   },
-  containerFormLandScape: {
+  containerForm: {
     borderWidth: 1,
     width: '40%',
   },
-  containerFormPortrait: {
-    borderWidth: 1,
-    width: '80%',
-  },
-  containerPictureLandScape: {
-    width: '40%',
-    borderWidth: 1,
-  },
-  containerPicturePortrait: {
-    width: '80%',
-    borderWidth: 1,
-  },
+
   containerMap: {
     width: '80%',
     borderWidth: 1,
@@ -102,14 +110,7 @@ const styles = StyleSheet.create({
 
     paddingVertical: 5,
   },
-  container_Name_Picture_LandScape: {
-    width: '100%',
-    flexDirection: 'row',
-  },
-  container_Name_Picture_Portrait: {
-    width: '100%',
-    flexDirection: 'column',
-  },
+
   textTitle: {
     fontSize: 20,
     fontWeight: 'bold',
