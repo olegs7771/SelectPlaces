@@ -5,6 +5,7 @@ import MapLocation from './MapLocation';
 
 import {connect} from 'react-redux';
 import {addPlace} from '../../actions/placesAction';
+const uuid = require('uuid/v1');
 
 export class SelectPlace extends Component {
   constructor(props) {
@@ -36,9 +37,12 @@ export class SelectPlace extends Component {
   }
   _sharePlace = e => {
     const newPlace = {
+      id: uuid(),
+      key: JSON.stringify(Math.random()),
       name: this.state.placeName,
-      location: this.props.location,
+      location: this.props.location.location,
     };
+
     this.props.addPlace(newPlace);
   };
 
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  location: state.place.selectedPlace.location,
+  location: state.location,
 });
 
 const mapDispatchToProps = {addPlace};

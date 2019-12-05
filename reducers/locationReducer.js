@@ -1,14 +1,13 @@
-import {SELECT_LOCATION, ADD_PLACE} from '../actions/types';
+import {SELECT_LOCATION} from '../actions/types';
 const initialState = {
-  places: [],
-  selectedPlace: null,
+  location: null,
 };
 export default function(state = initialState, action) {
   switch (action.type) {
-    case ADD_PLACE:
+    case SELECT_LOCATION:
       return {
         ...state,
-        places: state.places.concat(action.payload),
+        location: action.payload,
       };
     default:
       return state;
