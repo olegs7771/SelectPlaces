@@ -5,6 +5,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import WelcomePage from './app/auth/WelcomePage';
 import SelectPlace from './app/places/SelectPlace';
 import SharedPlaces from './app/sharedPlaces/SharedPlaces';
+import ImagePlace from './app/places/ImagePlace';
 //Redux
 import {Provider} from 'react-redux';
 import configureStore from './store';
@@ -15,6 +16,7 @@ const appStack = createStackNavigator(
     Home: {screen: WelcomePage},
     Places: {screen: SelectPlace},
     SharedPlaces: {screen: SharedPlaces},
+    Image: {screen: ImagePlace},
   },
   {
     initialRouteName: 'Home',

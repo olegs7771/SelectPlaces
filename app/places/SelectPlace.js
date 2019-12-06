@@ -6,7 +6,9 @@ import {
   Button,
   Dimensions,
   ScrollView,
+  Image,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import TextForm from '../components/TextForm';
 import MapLocation from './MapLocation';
 
@@ -29,6 +31,7 @@ export class SelectPlace extends Component {
         pictureWidth: '100%',
         landScape: false,
       },
+      pickedImage: null,
     };
     Dimensions.addEventListener('change', dims => {
       console.log('dims.window.width', dims.window.width);
@@ -46,6 +49,22 @@ export class SelectPlace extends Component {
       });
     });
   }
+
+  _pickImage = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      console.log(image);
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          pickedImage: image.path,
+        };
+      });
+    });
+  };
   _sharePlace = e => {
     if (this.state.form.placeName.trim().length === 0) {
       return;
@@ -55,13 +74,14 @@ export class SelectPlace extends Component {
       key: JSON.stringify(Math.random()),
       name: this.state.form.placeName,
       image: {
-        uri: 'https://www.pexels.com/photo/bloom-blooming-blossom-blur-462118/',
+        uri: this.state.pickedImage,
       },
       location: this.props.location.location,
     };
 
     this.props.addPlace(newPlace);
     this.props.navigation.navigate('SharedPlaces');
+
     console.log('newPlace', newPlace);
   };
 
@@ -107,7 +127,13 @@ export class SelectPlace extends Component {
                 borderWidth: 1,
                 width: this.state.respStyles.pictureWidth,
               }}>
-              <Button title="Choose Picture" />
+              {this.state.pickedImage ? (
+                <Image
+                  source={{uri: this.state.pickedImage}}
+                  style={{width: '100%', height: 200}}
+                />
+              ) : null}
+              <Button title="Choose Picture" onPress={this._pickImage} />
             </View>
           </View>
           <View style={styles.containerMap}>
@@ -120,7 +146,7 @@ export class SelectPlace extends Component {
           <View style={styles.containerButton}>
             <Button
               title="Share Place"
-              color="#5f8f9c"
+              color="red"
               onPress={this._sharePlace}
             />
           </View>
