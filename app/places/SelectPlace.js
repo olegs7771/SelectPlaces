@@ -54,11 +54,15 @@ export class SelectPlace extends Component {
       id: uuid(),
       key: JSON.stringify(Math.random()),
       name: this.state.form.placeName,
+      image: {
+        uri: 'https://www.pexels.com/photo/bloom-blooming-blossom-blur-462118/',
+      },
       location: this.props.location.location,
     };
 
     this.props.addPlace(newPlace);
     this.props.navigation.navigate('SharedPlaces');
+    console.log('newPlace', newPlace);
   };
 
   render() {
