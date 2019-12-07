@@ -3,7 +3,8 @@ import {Text, View, StyleSheet, Image} from 'react-native';
 import MapView from 'react-native-maps';
 export default class SharedItems extends Component {
   render() {
-    let marker;
+    const marker = <MapView.Marker coordinate={this.props.location} />;
+
     return (
       <View style={styles.container}>
         <View style={styles.containerName}>
@@ -14,10 +15,7 @@ export default class SharedItems extends Component {
           <View style={styles.containerPicture}>
             <Image
               style={{width: '100%', height: '100%'}}
-              source={{
-                uri:
-                  'http://www.antiochflowershop.com/assets/1/14/DimRegular/167384M.jpg?145761',
-              }}
+              source={this.props.image}
             />
           </View>
           <View style={styles.containerMap}>

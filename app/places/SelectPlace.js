@@ -26,7 +26,6 @@ export class SelectPlace extends Component {
       respStyles: {
         npContainerFlexDirection: 'column',
         alignContent: 'flex-start',
-
         formWidth: '100%',
         pictureWidth: '100%',
         landScape: false,
@@ -50,13 +49,24 @@ export class SelectPlace extends Component {
     });
   }
 
-  _pickImage = () => {
+  //Clean Image from Preview
+  componentDidMount() {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        pickedImage: null,
+      };
+    });
+  }
+
+  _pickImageStorage = () => {
     ImagePicker.openPicker({
       width: 300,
       height: 400,
       cropping: true,
+      includeBase64: true,
     }).then(image => {
-      console.log(image);
+      console.log('image.data', image.data);
       this.setState(prevState => {
         return {
           ...prevState,
@@ -65,6 +75,27 @@ export class SelectPlace extends Component {
       });
     });
   };
+  _pickImageCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    })
+      .then(image => {
+        console.log('image', image);
+
+        this.setState(prevState => {
+          return {
+            ...prevState,
+            pickedImage: image.path,
+          };
+        });
+      })
+      .catch(err => {
+        console.log('error :', err);
+      });
+  };
+
   _sharePlace = e => {
     if (this.state.form.placeName.trim().length === 0) {
       return;
@@ -103,11 +134,10 @@ export class SelectPlace extends Component {
             style={{
               width: '80%',
               flexDirection: this.state.respStyles.npContainerFlexDirection,
-              borderWidth: 1,
+
               justifyContent: this.state.respStyles.alignContent,
             }}>
-            <View
-              style={{borderWidth: 1, width: this.state.respStyles.formWidth}}>
+            <View style={{width: this.state.respStyles.formWidth}}>
               <TextForm
                 type="text"
                 onChangeText={text =>
@@ -122,9 +152,8 @@ export class SelectPlace extends Component {
                 placeholder="Pick the Name"
               />
             </View>
-            <View
+            <View //Picture Container
               style={{
-                borderWidth: 1,
                 width: this.state.respStyles.pictureWidth,
               }}>
               {this.state.pickedImage ? (
@@ -133,7 +162,21 @@ export class SelectPlace extends Component {
                   style={{width: '100%', height: 200}}
                 />
               ) : null}
-              <Button title="Choose Picture" onPress={this._pickImage} />
+              <View ///Buttons Container
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: '80%',
+                  alignSelf: 'center',
+                  marginVertical: 2,
+                  paddingVertical: 5,
+                }}>
+                <Button
+                  title="Choose Picture"
+                  onPress={this._pickImageStorage}
+                />
+                <Button title="Camera" onPress={this._pickImageCamera} />
+              </View>
             </View>
           </View>
           <View style={styles.containerMap}>
@@ -146,7 +189,7 @@ export class SelectPlace extends Component {
           <View style={styles.containerButton}>
             <Button
               title="Share Place"
-              color="red"
+              color="#4287f5"
               onPress={this._sharePlace}
             />
           </View>
@@ -182,6 +225,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     marginTop: 10,
+    borderRadius: 5,
   },
   containerText: {
     alignItems: 'center',
