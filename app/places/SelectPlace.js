@@ -110,9 +110,13 @@ export class SelectPlace extends Component {
     fd.append('name', 'Oleg');
     fd.append('age', 44);
     fd.append('id', 123);
-    console.log('Array', Array.from(fd));
+    fd.append('created at', Date.now());
+    console.log('Array', Array.from(fd._parts));
 
-    console.log('fd', fd);
+    console.log('fd', fd._parts[0]);
+    fd._parts.forEach(i => {
+      console.log('i', i);
+    });
   };
 
   render() {
