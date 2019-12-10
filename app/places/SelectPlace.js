@@ -13,7 +13,7 @@ import TextForm from '../components/TextForm';
 import MapLocation from './MapLocation';
 
 import {connect} from 'react-redux';
-import {addPlace} from '../../actions/placesAction';
+import {addPlace, createPlace, getPlace} from '../../actions/placesAction';
 const uuid = require('uuid/v1');
 
 export class SelectPlace extends Component {
@@ -30,6 +30,7 @@ export class SelectPlace extends Component {
         pictureWidth: '100%',
         landScape: false,
       },
+
       pickedImage: null,
     };
     Dimensions.addEventListener('change', dims => {
@@ -65,29 +66,36 @@ export class SelectPlace extends Component {
       height: 400,
       cropping: true,
       includeBase64: true,
-    }).then(image => {
-      console.log('image.data', image.data);
-      this.setState(prevState => {
-        return {
-          ...prevState,
-          pickedImage: image.path,
-        };
+    })
+      .then(image => {
+        console.log('image', image);
+        let source = {uri: image.path};
+        this.setState(prevState => {
+          return {
+            ...prevState,
+            pickedImage: source,
+          };
+        });
+      })
+      .catch(err => {
+        console.log('error :', err);
       });
-    });
   };
   _pickImageCamera = () => {
     ImagePicker.openCamera({
       width: 300,
       height: 400,
       cropping: true,
+      includeBase64: true,
     })
       .then(image => {
         console.log('image', image);
+        let source = {uri: image.path};
 
         this.setState(prevState => {
           return {
             ...prevState,
-            pickedImage: image.path,
+            pickedImage: source,
           };
         });
       })
@@ -96,28 +104,19 @@ export class SelectPlace extends Component {
       });
   };
 
+  //Add New Place To DB
   _sharePlace = e => {
-    if (this.state.form.placeName.trim().length === 0) {
-      return;
-    }
-    const newPlace = {
-      id: uuid(),
-      key: JSON.stringify(Math.random()),
-      name: this.state.form.placeName,
-      image: {
-        uri: this.state.pickedImage,
-      },
-      location: this.props.location.location,
-    };
+    let fd = new FormData();
+    fd.append('name', 'Oleg');
+    fd.append('age', 44);
+    fd.append('id', 123);
+    console.log('Array', Array.from(fd));
 
-    this.props.addPlace(newPlace);
-    this.props.navigation.navigate('SharedPlaces');
-
-    console.log('newPlace', newPlace);
+    console.log('fd', fd);
   };
 
   render() {
-    console.log('this.state.respStyles', this.state.respStyles.landScape);
+    console.log('this.state.pickedImage', this.state.pickedImage);
 
     return (
       <ScrollView>
@@ -152,13 +151,13 @@ export class SelectPlace extends Component {
                 placeholder="Pick the Name"
               />
             </View>
-            <View //Picture Container
+            <View //Picture Container Preview
               style={{
                 width: this.state.respStyles.pictureWidth,
               }}>
               {this.state.pickedImage ? (
                 <Image
-                  source={{uri: this.state.pickedImage}}
+                  source={this.state.pickedImage}
                   style={{width: '100%', height: 200}}
                 />
               ) : null}
@@ -249,6 +248,6 @@ const mapStateToProps = state => ({
   location: state.location,
 });
 
-const mapDispatchToProps = {addPlace};
+const mapDispatchToProps = {addPlace, createPlace, getPlace};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectPlace);
