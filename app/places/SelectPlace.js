@@ -32,6 +32,7 @@ export class SelectPlace extends Component {
       },
 
       pickedImage: null,
+      imageData: null,
     };
     Dimensions.addEventListener('change', dims => {
       console.log('dims.window.width', dims.window.width);
@@ -69,33 +70,12 @@ export class SelectPlace extends Component {
     })
       .then(image => {
         console.log('image', image);
-        let source = {uri: image.path};
-        this.setState(prevState => {
-          return {
-            ...prevState,
-            pickedImage: source,
-          };
-        });
-      })
-      .catch(err => {
-        console.log('error :', err);
-      });
-  };
-  _pickImageCamera = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-    })
-      .then(image => {
-        console.log('image', image);
-        let source = {uri: image.path};
 
         this.setState(prevState => {
           return {
             ...prevState,
-            pickedImage: source,
+            pickedImage: {uri: `data:${image.mime};base64,${image.data}`},
+            imageData: image.data,
           };
         });
       })
@@ -103,24 +83,47 @@ export class SelectPlace extends Component {
         console.log('error :', err);
       });
   };
+  // _pickImageCamera = () => {
+  //   ImagePicker.openCamera({
+  //     width: 300,
+  //     height: 400,
+  //     cropping: true,
+  //     includeBase64: true,
+  //   })
+  //     .then(image => {
+  //       console.log('image', image);
+  //       let source = {uri: image.path};
+
+  //       this.setState(prevState => {
+  //         return {
+  //           ...prevState,
+  //           pickedImage: source,
+  //         };
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log('error :', err);
+  //     });
+  // };
 
   //Add New Place To DB
   _sharePlace = e => {
+    const key = Math.random() * 100000;
     let fd = new FormData();
-    fd.append('name', 'Oleg');
-    fd.append('age', 44);
-    fd.append('id', 123);
-    fd.append('created at', Date.now());
-    console.log('Array', Array.from(fd._parts));
+    fd.append('name', this.state.form.placeName);
+    fd.append('key', key);
 
-    console.log('fd', fd._parts[0]);
-    fd._parts.forEach(i => {
-      console.log('i', i);
-    });
+    fd.append('latitude', this.props.location.latitude);
+    fd.append('longitude', this.props.location.longitude);
+    fd.append('latitudeDelta', this.props.location.latitudeDelta);
+    fd.append('longitudeDelta', this.props.location.longitudeDelta);
+    fd.append('sampleFile', this.state.image);
+    console.log('Array', Array.from(fd._parts));
+    this.props.createPlace(fd);
   };
 
   render() {
-    console.log('this.state.pickedImage', this.state.pickedImage);
+    console.log('this.props.location', this.props.location);
 
     return (
       <ScrollView>
@@ -190,10 +193,11 @@ export class SelectPlace extends Component {
           </View>
 
           <View style={styles.containerButton}>
+            <Button title="Share " color="#4287f5" onPress={this._sharePlace} />
             <Button
-              title="Share Place"
+              title="ShareD Place"
               color="#4287f5"
-              onPress={this._sharePlace}
+              onPress={() => this.props.navigation.navigate('SharedPlaces')}
             />
           </View>
         </View>

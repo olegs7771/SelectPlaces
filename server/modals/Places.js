@@ -4,11 +4,25 @@ const PlacesSchema = new Schema({
   name: {
     type: String,
   },
-  image: {
+  key: {
     type: String,
   },
+  file: {
+    type: Buffer,
+  },
   location: {
-    type: Object,
+    latitude: {
+      type: Number,
+    },
+    longitude: {
+      type: Number,
+    },
+    latitudeDelta: {
+      type: Number,
+    },
+    longitudeDelta: {
+      type: Number,
+    },
   },
   date: {
     type: Date,
