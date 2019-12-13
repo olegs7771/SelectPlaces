@@ -32,6 +32,7 @@ export class SelectPlace extends Component {
       },
 
       pickedImage: null,
+      imageData: null,
     };
     Dimensions.addEventListener('change', dims => {
       console.log('dims.window.width', dims.window.width);
@@ -69,11 +70,12 @@ export class SelectPlace extends Component {
     })
       .then(image => {
         console.log('image', image);
-        let source = {uri: `data:${image.mime};base64,${image.data}`};
+
         this.setState(prevState => {
           return {
             ...prevState,
-            pickedImage: source,
+            pickedImage: {uri: `data:${image.mime};base64,${image.data}`},
+            imageData: image.data,
           };
         });
       })
@@ -106,7 +108,9 @@ export class SelectPlace extends Component {
 
   //Add New Place To DB
   _sharePlace = e => {
+    const key = Math.random() * 100000;
     let fd = new FormData();
+<<<<<<< HEAD
     fd.append('placeName', this.state.form.placeName);
     fd.append('test1', 'mike');
     fd.append('test2', 'loran');
@@ -116,10 +120,22 @@ export class SelectPlace extends Component {
 
     console.log('Array', JSON.stringify(Array.from(fd._parts), '\t', 1));
     this.props.createPlace(fd._parts);
+=======
+    fd.append('name', this.state.form.placeName);
+    fd.append('key', key);
+
+    fd.append('latitude', this.props.location.latitude);
+    fd.append('longitude', this.props.location.longitude);
+    fd.append('latitudeDelta', this.props.location.latitudeDelta);
+    fd.append('longitudeDelta', this.props.location.longitudeDelta);
+    fd.append('sampleFile', this.state.image);
+    console.log('Array', Array.from(fd._parts));
+    this.props.createPlace(fd);
+>>>>>>> 240032fecb623ce604f07e8a649df911615ac0c2
   };
 
   render() {
-    console.log('this.state.pickedImage', this.state.pickedImage);
+    console.log('this.props.location', this.props.location);
 
     return (
       <ScrollView>
@@ -189,10 +205,11 @@ export class SelectPlace extends Component {
           </View>
 
           <View style={styles.containerButton}>
+            <Button title="Share " color="#4287f5" onPress={this._sharePlace} />
             <Button
-              title="Share Place"
+              title="ShareD Place"
               color="#4287f5"
-              onPress={this._sharePlace}
+              onPress={() => this.props.navigation.navigate('SharedPlaces')}
             />
           </View>
         </View>
