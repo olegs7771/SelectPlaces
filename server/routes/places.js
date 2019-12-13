@@ -10,6 +10,9 @@ router.get('/getPlace', (req, res) => {
       return res.status(200).json({msg: 'No place to show'});
     }
     res.status(200).json(places);
+    places.forEach(place => {
+      console.log('place', place);
+    });
   });
 });
 
@@ -17,23 +20,10 @@ router.get('/getPlace', (req, res) => {
 
 router.post('/upload', (req, res) => {
   console.log('req.body', req.body);
-<<<<<<< HEAD
+  const binaryData = ('binary', binary(req.body.sampleFile));
+  console.log('binaryData', binaryData);
 
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(200).json({msg: 'No files were uploaded.'});
-  }
-  res.status(200).json({msg: 'Success'});
-  let sampleFile = req.files.sampleFile;
-  console.log('req.files', req.files);
-  console.log('sampleFile ', sampleFile);
-  console.log('req.files', req.files);
-  // console.log('req.files.data', req.files.data);
-=======
->>>>>>> 240032fecb623ce604f07e8a649df911615ac0c2
-
-  const file = {name: req.body.name, file: binary(req.body.sampleFile)};
-  console.log('file', file);
-  if (Object.keys(file) === 0) {
+  if (Object.keys(req.body) === 0) {
     return console.log('no data to save!');
   } else {
     const newPlace = new Places({
@@ -45,7 +35,10 @@ router.post('/upload', (req, res) => {
         latitudeDelta: req.body.latitudeDelta,
         longitudeDelta: req.body.longitudeDelta,
       },
-      file: file.file,
+      img: {
+        data: binaryData,
+        contentType: req.body.contentType,
+      },
     })
       .save()
       .then(place => {

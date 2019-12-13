@@ -33,6 +33,7 @@ export class SelectPlace extends Component {
 
       pickedImage: null,
       imageData: null,
+      imageMime: null,
     };
     Dimensions.addEventListener('change', dims => {
       console.log('dims.window.width', dims.window.width);
@@ -69,13 +70,14 @@ export class SelectPlace extends Component {
       includeBase64: true,
     })
       .then(image => {
-        console.log('image', image);
+        console.log('image.data', image.data);
 
         this.setState(prevState => {
           return {
             ...prevState,
             pickedImage: {uri: `data:${image.mime};base64,${image.data}`},
             imageData: image.data,
+            imageMime: image.mime,
           };
         });
       })
@@ -83,44 +85,34 @@ export class SelectPlace extends Component {
         console.log('error :', err);
       });
   };
-  // _pickImageCamera = () => {
-  //   ImagePicker.openCamera({
-  //     width: 300,
-  //     height: 400,
-  //     cropping: true,
-  //     includeBase64: true,
-  //   })
-  //     .then(image => {
-  //       console.log('image', image);
-  //       let source = {uri: image.path};
+  _pickImageCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true,
+    })
+      .then(image => {
+        console.log('image', image);
 
-  //       this.setState(prevState => {
-  //         return {
-  //           ...prevState,
-  //           pickedImage: source,
-  //         };
-  //       });
-  //     })
-  //     .catch(err => {
-  //       console.log('error :', err);
-  //     });
-  // };
+        this.setState(prevState => {
+          return {
+            ...prevState,
+            pickedImage: {uri: `data:${image.mime};base64,${image.data}`},
+            imageData: image.data,
+            imageMime: image.mime,
+          };
+        });
+      })
+      .catch(err => {
+        console.log('error :', err);
+      });
+  };
 
   //Add New Place To DB
   _sharePlace = e => {
     const key = Math.random() * 100000;
     let fd = new FormData();
-<<<<<<< HEAD
-    fd.append('placeName', this.state.form.placeName);
-    fd.append('test1', 'mike');
-    fd.append('test2', 'loran');
-
-    let blob = new Blob([this.state.pickedImage], {type: 'image/jpeg'});
-    // fd.append('sampleFile', blob);
-
-    console.log('Array', JSON.stringify(Array.from(fd._parts), '\t', 1));
-    this.props.createPlace(fd._parts);
-=======
     fd.append('name', this.state.form.placeName);
     fd.append('key', key);
 
@@ -128,14 +120,14 @@ export class SelectPlace extends Component {
     fd.append('longitude', this.props.location.longitude);
     fd.append('latitudeDelta', this.props.location.latitudeDelta);
     fd.append('longitudeDelta', this.props.location.longitudeDelta);
-    fd.append('sampleFile', this.state.image);
+    fd.append('sampleFile', this.state.imageData);
+    fd.append('contentType', this.state.imageMime);
     console.log('Array', Array.from(fd._parts));
     this.props.createPlace(fd);
->>>>>>> 240032fecb623ce604f07e8a649df911615ac0c2
   };
 
   render() {
-    console.log('this.props.location', this.props.location);
+    console.log('this.state.pickedImage', this.state.pickedImage);
 
     return (
       <ScrollView>

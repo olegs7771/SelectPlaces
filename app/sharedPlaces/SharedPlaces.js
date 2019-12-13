@@ -30,7 +30,6 @@ class SharedPlaces extends Component {
   }
 
   render() {
-    console.log('this.props', this.props);
     if (this.props.places.length === 0) {
       return (
         <View style={styles.container}>
@@ -53,7 +52,7 @@ class SharedPlaces extends Component {
                 <SharedItems
                   key={item.key}
                   name={item.name}
-                  image={item.image}
+                  image={item.img}
                   location={item.location}
                 />
               )}

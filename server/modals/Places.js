@@ -7,8 +7,9 @@ const PlacesSchema = new Schema({
   key: {
     type: String,
   },
-  file: {
-    type: Buffer,
+  img: {
+    data: String,
+    contentType: String,
   },
   location: {
     latitude: {
