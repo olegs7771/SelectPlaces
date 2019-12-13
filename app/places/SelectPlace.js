@@ -69,7 +69,7 @@ export class SelectPlace extends Component {
     })
       .then(image => {
         console.log('image', image);
-        let source = {uri: image.path};
+        let source = {uri: `data:${image.mime};base64,${image.data}`};
         this.setState(prevState => {
           return {
             ...prevState,
@@ -81,42 +81,41 @@ export class SelectPlace extends Component {
         console.log('error :', err);
       });
   };
-  _pickImageCamera = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-    })
-      .then(image => {
-        console.log('image', image);
-        let source = {uri: image.path};
+  // _pickImageCamera = () => {
+  //   ImagePicker.openCamera({
+  //     width: 300,
+  //     height: 400,
+  //     cropping: true,
+  //     includeBase64: true,
+  //   })
+  //     .then(image => {
+  //       console.log('image', image);
+  //       let source = {uri: image.path};
 
-        this.setState(prevState => {
-          return {
-            ...prevState,
-            pickedImage: source,
-          };
-        });
-      })
-      .catch(err => {
-        console.log('error :', err);
-      });
-  };
+  //       this.setState(prevState => {
+  //         return {
+  //           ...prevState,
+  //           pickedImage: source,
+  //         };
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log('error :', err);
+  //     });
+  // };
 
   //Add New Place To DB
   _sharePlace = e => {
     let fd = new FormData();
-    fd.append('name', 'Oleg');
-    fd.append('age', 44);
-    fd.append('id', 123);
-    fd.append('created at', Date.now());
-    console.log('Array', Array.from(fd._parts));
+    fd.append('placeName', this.state.form.placeName);
+    fd.append('test1', 'mike');
+    fd.append('test2', 'loran');
 
-    console.log('fd', fd._parts[0]);
-    fd._parts.forEach(i => {
-      console.log('i', i);
-    });
+    let blob = new Blob([this.state.pickedImage], {type: 'image/jpeg'});
+    // fd.append('sampleFile', blob);
+
+    console.log('Array', JSON.stringify(Array.from(fd._parts), '\t', 1));
+    this.props.createPlace(fd._parts);
   };
 
   render() {

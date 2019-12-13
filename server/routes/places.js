@@ -25,6 +25,7 @@ router.post('/create_place', (req, res) => {
 
 router.post('/upload', (req, res) => {
   console.log('req.body', req.body);
+
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(200).json({msg: 'No files were uploaded.'});
   }
