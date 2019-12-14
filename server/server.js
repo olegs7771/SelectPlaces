@@ -10,13 +10,13 @@ const index = require('./routes/index');
 const places = require('./routes/places');
 
 //MongoDB URI
-const mongoURI =
-  'mongodb://olegs777:olegs777@ds125774.mlab.com:25774/select_places_react_native';
+// const mongoURI =
+//   'mongodb://olegs777:olegs777@ds125774.mlab.com:25774/select_places_react_native';
 //MongoDB connection
 
-const conn = mongoose
-  .connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true})
-  .then(() => console.log(`connected to ${mongoURI}`));
+// const conn = mongoose
+//   .connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true})
+//   .then(() => console.log(`connected to ${mongoURI}`));
 
 app.listen(PORT, () => {
   console.log(`App is listening on ${PORT}`);
