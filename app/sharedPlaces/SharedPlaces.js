@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import SharedItems from './SharedItems';
 
 import {connect} from 'react-redux';
@@ -35,9 +42,7 @@ class SharedPlaces extends Component {
         <View style={styles.container}>
           <Text style={styles.textTitle}> Here Shared Places </Text>
           <View style={{flex: 1, paddingBottom: 20, justifyContent: 'center'}}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', borderWidth: 1}}>
-              Loading..
-            </Text>
+            <ActivityIndicator size="large" color="#0000ff" />
           </View>
         </View>
       );

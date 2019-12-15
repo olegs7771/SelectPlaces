@@ -19,7 +19,7 @@ router.get('/getPlace', (req, res) => {
     collection.find().toArray((err, places) => {
       assert.equal(err, null);
       res.status(200).json(places);
-      console.log('places', places);
+      // console.log('places', places);
       client.close();
     });
   });
@@ -56,6 +56,7 @@ router.post('/upload', (req, res) => {
           assert.equal(err, null);
           assert.equal(1, result.result.n);
           console.log('Create one place seccessfully');
+          console.log('result', result);
         },
       );
       client.close();
