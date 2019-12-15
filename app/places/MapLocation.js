@@ -93,7 +93,8 @@ class MapLocation extends Component {
       latitudeDelta: this.state.focusedRegion.latitudeDelta,
       longitudeDelta: this.state.focusedRegion.longitudeDelta,
     };
-    this.props.selectLocation(data);
+    // this.props.selectLocation(data);
+    console.log('data', data);
   };
 
   render() {

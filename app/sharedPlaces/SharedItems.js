@@ -4,15 +4,15 @@ import MapView from 'react-native-maps';
 import BufferToBase64 from '../utils/BufferToBase64';
 export default class SharedItems extends Component {
   render() {
-    console.log('this.props.image.data', this.props.image.data);
+    // console.log('this.props.image.data', this.props.image.data);
 
-    const dataBase64 = BufferToBase64(this.props.image.data);
-    console.log('dataBase64', dataBase64);
+    // const dataBase64 = BufferToBase64(this.props.image.data);
+    // console.log('dataBase64', dataBase64);
 
-    const source = {
-      uri: `data:${this.props.image.contentType};base64,${this.props.image.data}`,
-    };
-    console.log('source', source);
+    // const source = {
+    //   uri: `data:${this.props.image.contentType};base64,${this.props.image.data}`,
+    // };
+    // console.log('source', source);
 
     const marker = <MapView.Marker coordinate={this.props.location} />;
 
@@ -23,9 +23,9 @@ export default class SharedItems extends Component {
         </View>
         <View //Picture & Map container
           style={{flexDirection: 'row'}}>
-          <View style={styles.containerPicture}>
+          {/* <View style={styles.containerPicture}>
             <Image style={{width: '100%', height: '100%'}} source={source} />
-          </View>
+          </View> */}
           <View style={styles.containerMap}>
             <MapView
               initialRegion={this.props.location}

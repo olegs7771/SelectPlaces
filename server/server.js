@@ -13,6 +13,18 @@ app.listen(PORT, () => {
   console.log(`App is listening on ${PORT}`);
 });
 
+//connect to mongoDB
+const db =
+  'mongodb://olegs777:olegs777@ds125774.mlab.com:25774/select_places_react_native';
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log(`connected to ${db}`))
+  .catch(err => console.log(err));
+
 //Views
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
