@@ -37,6 +37,8 @@ class SharedPlaces extends Component {
   }
 
   render() {
+    console.log('this.props.places.length ', this.props.places.length);
+
     if (this.props.places.length === 0) {
       return (
         <View style={styles.container}>
@@ -51,7 +53,7 @@ class SharedPlaces extends Component {
         <View style={styles.container}>
           <Text style={styles.textTitle}> Here Shared Places</Text>
           <View style={{flex: 1, width: '100%', paddingBottom: 20}}>
-            {/* <FlatList
+            <FlatList
               data={this.props.places}
               renderItem={({item}) => (
                 <SharedItems
@@ -61,7 +63,7 @@ class SharedPlaces extends Component {
                   location={item.location}
                 />
               )}
-            /> */}
+            />
           </View>
         </View>
       );
