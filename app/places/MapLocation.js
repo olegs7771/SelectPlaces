@@ -88,13 +88,13 @@ class MapLocation extends Component {
       };
     });
     const data = {
-      latitude: this.state.focusedRegion.latitude,
-      longitude: this.state.focusedRegion.longitude,
+      longitude: coordinate.longitude,
+      latitude: coordinate.latitude,
       latitudeDelta: this.state.focusedRegion.latitudeDelta,
       longitudeDelta: this.state.focusedRegion.longitudeDelta,
     };
-    // this.props.selectLocation(data);
-    console.log('data', data);
+    this.props.selectLocation(data);
+    console.log('data be send', data);
   };
 
   render() {

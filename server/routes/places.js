@@ -1,16 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Places = require('../modals/Places');
+const fs = require('fs-extra');
 
 router.get('/getPlace', (req, res) => {
   Places.find().then(places => {
     if (!places.length > 0) {
-      return res.status(200).json({msg: 'No place to show'});
+      return res.status(200).json({message: 'No place to show'});
     }
     res.status(200).json(places);
-    places.forEach(place => {
-      console.log('place', place);
-    });
   });
 });
 
@@ -18,12 +16,19 @@ router.get('/getPlace', (req, res) => {
 
 router.post('/upload', (req, res) => {
   console.log('req.body', req.body);
-  const binaryData = ('binary', binary(req.body.sampleFile));
-  console.log('binaryData', binaryData);
 
   if (Object.keys(req.body) === 0) {
     return console.log('no data to save!');
   } else {
+    //Write File to /public/images
+    fs.writeFile('./public/images/myfile.jpg', req.body.sampleFile)
+      .then(res => {
+        console.log('res', res);
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+
     const newPlace = new Places({
       name: req.body.name,
       key: req.body.key,
@@ -40,6 +45,8 @@ router.post('/upload', (req, res) => {
     })
       .save()
       .then(place => {
+        console.log('New place was created');
+
         console.log('saved place', place);
       });
   }

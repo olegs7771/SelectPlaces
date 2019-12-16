@@ -14,6 +14,7 @@ import MapLocation from './MapLocation';
 
 import {connect} from 'react-redux';
 import {addPlace, createPlace, getPlace} from '../../actions/placesAction';
+
 const uuid = require('uuid/v1');
 
 export class SelectPlace extends Component {
@@ -31,7 +32,7 @@ export class SelectPlace extends Component {
         landScape: false,
       },
 
-      pickedImage: null,
+      pickedImageURI: null,
       imageData: null,
       imageMime: null,
     };
@@ -70,35 +71,12 @@ export class SelectPlace extends Component {
       includeBase64: true,
     })
       .then(image => {
-        console.log('image.data', image.data);
-
-        this.setState(prevState => {
-          return {
-            ...prevState,
-            pickedImage: {uri: `data:${image.mime};base64,${image.data}`},
-            imageData: image.data,
-            imageMime: image.mime,
-          };
-        });
-      })
-      .catch(err => {
-        console.log('error :', err);
-      });
-  };
-  _pickImageCamera = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-    })
-      .then(image => {
         console.log('image', image);
 
         this.setState(prevState => {
           return {
             ...prevState,
-            pickedImage: {uri: `data:${image.mime};base64,${image.data}`},
+            pickedImageURI: image.path,
             imageData: image.data,
             imageMime: image.mime,
           };
@@ -121,7 +99,8 @@ export class SelectPlace extends Component {
     fd.append('latitudeDelta', this.props.location.latitudeDelta);
     fd.append('longitudeDelta', this.props.location.longitudeDelta);
     fd.append('sampleFile', this.state.imageData);
-    fd.append('contentType', this.state.imageMime);
+    // fd.append('contentType', this.state.imageMime);
+    fd.append('uri', this.state.pickedImageURI);
     console.log('Array', Array.from(fd._parts));
     this.props.createPlace(fd);
   };
@@ -168,7 +147,7 @@ export class SelectPlace extends Component {
               }}>
               {this.state.pickedImage ? (
                 <Image
-                  source={this.state.pickedImage}
+                  source={{uri: this.state.pickedImage}}
                   style={{width: '100%', height: 200}}
                 />
               ) : null}

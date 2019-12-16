@@ -24,6 +24,8 @@ mongoose
   })
   .then(() => console.log(`connected to ${db}`))
   .catch(err => console.log(err));
+//Public Folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 //Views
 app.set('views', path.join(__dirname, 'views'));

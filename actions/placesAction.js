@@ -1,4 +1,10 @@
-import {SELECT_LOCATION, ADD_PLACE, GET_ALL_PLACES} from './types';
+import {
+  SELECT_LOCATION,
+  ADD_PLACE,
+  GET_ALL_PLACES,
+  API_MESSAGE,
+  LOADING,
+} from './types';
 import axios from 'axios';
 export const addPlace = data => {
   return {
@@ -41,12 +47,26 @@ export const createPlace = FD => dispatch => {
 
 export const getPlace = () => dispatch => {
   console.log('getting places');
+  dispatch(loading());
 
   axios.get('http://10.0.2.2:3000/api/getPlace').then(res => {
     console.log('res.data', res.data);
-    dispatch({
-      type: GET_ALL_PLACES,
-      payload: res.data,
-    });
+    if (res.data.message) {
+      dispatch({
+        type: API_MESSAGE,
+        payload: res.data,
+      });
+    } else {
+      dispatch({
+        type: GET_ALL_PLACES,
+        payload: res.data,
+      });
+    }
   });
+};
+
+export const loading = () => {
+  return {
+    type: LOADING,
+  };
 };
