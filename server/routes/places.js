@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Places = require('../modals/Places');
 const fs = require('fs-extra');
+const mongodb = require('mongodb');
+const binary = mongodb.Binary;
 
 router.get('/getPlace', (req, res) => {
   Places.find().then(places => {
@@ -21,7 +23,11 @@ router.post('/upload', (req, res) => {
     return console.log('no data to save!');
   } else {
     //Write File to /public/images
-    fs.writeFile('./public/images/myfile.jpg', req.body.sampleFile)
+    const dataBinary = binary(req.body.sampleFile);
+    fs.writeFile(
+      `./public/images/` + Date.now() + req.body.name + `.jpg`,
+      dataBinary,
+    )
       .then(res => {
         console.log('res', res);
       })
@@ -50,6 +56,10 @@ router.post('/upload', (req, res) => {
         console.log('saved place', place);
       });
   }
+});
+
+fs.readFile('./public/images/reactjs-1566440005648-958.jpg').then(file => {
+  console.log('file', file);
 });
 
 module.exports = router;
