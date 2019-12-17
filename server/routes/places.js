@@ -3,7 +3,8 @@ const router = express.Router();
 const Places = require('../modals/Places');
 const fs = require('fs-extra');
 const mongodb = require('mongodb');
-const binary = mongodb.Binary;
+const path = require('path');
+const moment = require('moment');
 
 router.get('/getPlace', (req, res) => {
   Places.find().then(places => {
@@ -20,9 +21,26 @@ router.post('/upload', (req, res) => {
   console.log('req.body', req.body);
   console.log('req.files', req.files);
   let sampleFile = req.files.sampleFile;
+  console.log('req.files.sampleFile.mimetype', req.files.sampleFile.mimetype);
 
+  //check for mimetype
+  const filetypes = /jpeg|jpg|gif/;
+  const mimetype = filetypes.test(req.files.sampleFile.mimetype);
+  console.log('mimetype', mimetype);
+  if (!mimetype) {
+    return res.status(400).json({error: 'Wrong format!'});
+  }
+  const mime = req.files.sampleFile.mimetype.replace('image/', '.');
+  const fileName =
+    req.files.sampleFile.name === '' ? 'image' : req.files.sampleFile.name;
   sampleFile.mv(
-    './public/images/' + req.files.sampleFile.name + '.jpeg',
+    './public/images/' +
+      fileName +
+      '-' +
+      moment(Date.now()).format('DD-MM-YYYY') +
+      '-' +
+      Math.trunc(Math.random() * 10000000) +
+      mime,
     function(err) {
       if (err) return res.status(500).send(err);
 
