@@ -19,31 +19,36 @@ router.get('/getPlace', (req, res) => {
 router.post('/upload', (req, res) => {
   console.log('req.body', req.body);
   console.log('req.files', req.files);
+  let sampleFile = req.files.sampleFile;
 
-  if (Object.keys(req.files) === 0) {
-    return res.status(200).json({message: 'No files were uploaded!'});
-  } else {
-    // Write File to /public/images
-    // const newPlace = new Places({
-    //   name: req.body.name,
-    //   key: req.body.key,
-    //   location: {
-    //     latitude: req.body.latitude,
-    //     longitude: req.body.longitude,
-    //     latitudeDelta: req.body.latitudeDelta,
-    //     longitudeDelta: req.body.longitudeDelta,
-    //   },
-    //   // img: {
-    //   //   data: binaryData,
-    //   //   contentType: req.body.contentType,
-    //   // },
-    // })
-    //   .save()
-    //   .then(place => {
-    //     console.log('New place was created');
-    //     console.log('saved place', place);
-    //   });
-  }
+  sampleFile.mv(
+    './public/images/' + req.files.sampleFile.name + '.jpeg',
+    function(err) {
+      if (err) return res.status(500).send(err);
+
+      res.send('File uploaded!');
+    },
+  );
+  // Write File to /public/images
+  // const newPlace = new Places({
+  //   name: req.body.name,
+  //   key: req.body.key,
+  //   location: {
+  //     latitude: req.body.latitude,
+  //     longitude: req.body.longitude,
+  //     latitudeDelta: req.body.latitudeDelta,
+  //     longitudeDelta: req.body.longitudeDelta,
+  //   },
+  //   // img: {
+  //   //   data: binaryData,
+  //   //   contentType: req.body.contentType,
+  //   // },
+  // })
+  //   .save()
+  //   .then(place => {
+  //     console.log('New place was created');
+  //     console.log('saved place', place);
+  //   });
 });
 
 // fs.readFile('./public/images/20191021_153059.jpg').then(file => {

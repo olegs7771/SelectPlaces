@@ -31,7 +31,7 @@ export class SelectPlace extends Component {
         pictureWidth: '100%',
         landScape: false,
       },
-
+      isImagePicked: false,
       fileURI: null,
       fileTYPE: null,
     };
@@ -77,6 +77,7 @@ export class SelectPlace extends Component {
             ...prevState,
             fileURI: image.path,
             fileTYPE: image.mime,
+            isImagePicked: true,
           };
         });
       })
@@ -99,6 +100,7 @@ export class SelectPlace extends Component {
             ...prevState,
             fileURI: image.path,
             fileTYPE: image.mime,
+            isImagePicked: true,
           };
         });
       })
@@ -132,6 +134,8 @@ export class SelectPlace extends Component {
   };
 
   render() {
+    console.log('this.state.isImagePicked', this.state.isImagePicked);
+
     return (
       <ScrollView>
         <View
@@ -207,6 +211,7 @@ export class SelectPlace extends Component {
                         return {
                           ...prevState,
                           fileURI: null,
+                          isImagePicked: false,
                         };
                       })
                     }
@@ -222,8 +227,19 @@ export class SelectPlace extends Component {
             <MapLocation />
           </View>
 
-          <View style={{flexDirection: 'row', borderWidth: 1}}>
-            <Button title="Share " color="#4287f5" onPress={this._sharePlace} />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 10,
+              justifyContent: 'space-between',
+              width: '60%',
+            }}>
+            <Button
+              title="Share "
+              color="#4287f5"
+              onPress={this._sharePlace}
+              disabled={!this.state.isImagePicked}
+            />
             <Button
               title="ShareD Place"
               color="#4287f5"
