@@ -28,13 +28,14 @@ export const selectLocation = data => {
 
 export const createPlace = FD => dispatch => {
   console.log('FD', FD);
+
   axios({
     url: 'http://10.0.2.2:3000/api/upload',
     method: 'POST',
     data: FD,
     headers: {
       Accept: 'application/json',
-      // 'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data',
     },
   })
     .then(res => {

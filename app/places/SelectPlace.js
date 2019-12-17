@@ -32,9 +32,8 @@ export class SelectPlace extends Component {
         landScape: false,
       },
 
-      pickedImageURI: null,
-      imageData: null,
-      imageMime: null,
+      fileURI: null,
+      fileTYPE: null,
     };
     Dimensions.addEventListener('change', dims => {
       console.log('dims.window.width', dims.window.width);
@@ -58,7 +57,7 @@ export class SelectPlace extends Component {
     this.setState(prevState => {
       return {
         ...prevState,
-        pickedImage: null,
+        fileURI: null,
       };
     });
   }
@@ -68,7 +67,7 @@ export class SelectPlace extends Component {
       width: 300,
       height: 400,
       cropping: true,
-      includeBase64: true,
+      // includeBase64: true,
     })
       .then(image => {
         console.log('image', image);
@@ -76,9 +75,30 @@ export class SelectPlace extends Component {
         this.setState(prevState => {
           return {
             ...prevState,
-            pickedImageURI: image.path,
-            imageData: image.data,
-            imageMime: image.mime,
+            fileURI: image.path,
+            fileTYPE: image.mime,
+          };
+        });
+      })
+      .catch(err => {
+        console.log('error :', err);
+      });
+  };
+  _pickImageCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      // includeBase64: true,
+    })
+      .then(image => {
+        console.log('image', image);
+
+        this.setState(prevState => {
+          return {
+            ...prevState,
+            fileURI: image.path,
+            fileTYPE: image.mime,
           };
         });
       })
@@ -91,23 +111,27 @@ export class SelectPlace extends Component {
   _sharePlace = e => {
     const key = Math.random() * 100000;
     let fd = new FormData();
-    fd.append('name', this.state.form.placeName);
+    fd.append('placeName', this.state.form.placeName);
     fd.append('key', key);
 
+    // Location
     fd.append('latitude', this.props.location.latitude);
     fd.append('longitude', this.props.location.longitude);
     fd.append('latitudeDelta', this.props.location.latitudeDelta);
     fd.append('longitudeDelta', this.props.location.longitudeDelta);
-    fd.append('sampleFile', this.state.imageData);
-    // fd.append('contentType', this.state.imageMime);
-    fd.append('uri', this.state.pickedImageURI);
+    //Image .if no image picked dont append image data
+    const options = {
+      uri: this.state.fileURI,
+      type: this.state.fileTYPE,
+      name: this.state.form.placeName.replace(/\s+/g, '-').toLowerCase(),
+    };
+    fd.append('sampleFile', options);
+
     console.log('Array', Array.from(fd._parts));
     this.props.createPlace(fd);
   };
 
   render() {
-    console.log('this.state.pickedImage', this.state.pickedImage);
-
     return (
       <ScrollView>
         <View
@@ -145,26 +169,49 @@ export class SelectPlace extends Component {
               style={{
                 width: this.state.respStyles.pictureWidth,
               }}>
-              {this.state.pickedImage ? (
+              {this.state.fileURI && (
                 <Image
-                  source={{uri: this.state.pickedImage}}
+                  source={{uri: this.state.fileURI}}
                   style={{width: '100%', height: 200}}
                 />
-              ) : null}
+              )}
               <View ///Buttons Container
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  width: '80%',
+                  width: '100%',
                   alignSelf: 'center',
                   marginVertical: 2,
                   paddingVertical: 5,
                 }}>
-                <Button
-                  title="Choose Picture"
-                  onPress={this._pickImageStorage}
-                />
-                <Button title="Camera" onPress={this._pickImageCamera} />
+                {!this.state.fileURI && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignSelf: 'center',
+                      width: '80%',
+                    }}>
+                    <Button
+                      title="Choose Picture"
+                      onPress={this._pickImageStorage}
+                    />
+                    <Button title="Camera" onPress={this._pickImageCamera} />
+                  </View>
+                )}
+                {this.state.fileURI && (
+                  <Button
+                    title="Cancel"
+                    onPress={() =>
+                      this.setState(prevState => {
+                        return {
+                          ...prevState,
+                          fileURI: null,
+                        };
+                      })
+                    }
+                  />
+                )}
               </View>
             </View>
           </View>
@@ -175,7 +222,7 @@ export class SelectPlace extends Component {
             <MapLocation />
           </View>
 
-          <View style={styles.containerButton}>
+          <View style={{flexDirection: 'row', borderWidth: 1}}>
             <Button title="Share " color="#4287f5" onPress={this._sharePlace} />
             <Button
               title="ShareD Place"
