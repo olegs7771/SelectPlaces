@@ -1,4 +1,5 @@
 //Auth
+export const GET_AUTH_USER = 'GET_AUTH_USER';
 export const REGISTER_USER = 'REGISTER_USER';
 //Location
 export const SELECT_LOCATION = 'SELECT_LOCATION';
