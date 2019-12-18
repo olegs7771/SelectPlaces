@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const PlacesSchema = new Schema({
-  name: {
+  placeName: {
     type: String,
   },
   key: {
     type: String,
   },
-  img: {
-    data: String,
-    contentType: String,
+  imgURI: {
+    type: String,
   },
   location: {
     latitude: {

@@ -32,45 +32,36 @@ router.post('/upload', (req, res) => {
   }
   const mime = req.files.sampleFile.mimetype.replace('image/', '.');
   const fileName =
-    req.files.sampleFile.name === '' ? 'image' : req.files.sampleFile.name;
-  sampleFile.mv(
-    './public/images/' +
-      fileName +
-      '-' +
-      moment(Date.now()).format('DD-MM-YYYY') +
-      '-' +
-      Math.trunc(Math.random() * 10000000) +
-      mime,
-    function(err) {
-      if (err) return res.status(500).send(err);
+    req.files.sampleFile.name === ''
+      ? 'image'
+      : req.files.sampleFile.name +
+        '-' +
+        moment(Date.now()).format('DD-MM-YYYY') +
+        '-' +
+        Math.trunc(Math.random() * 10000000) +
+        mime;
 
-      res.send('File uploaded!');
-    },
-  );
-  // Write File to /public/images
-  // const newPlace = new Places({
-  //   name: req.body.name,
-  //   key: req.body.key,
-  //   location: {
-  //     latitude: req.body.latitude,
-  //     longitude: req.body.longitude,
-  //     latitudeDelta: req.body.latitudeDelta,
-  //     longitudeDelta: req.body.longitudeDelta,
-  //   },
-  //   // img: {
-  //   //   data: binaryData,
-  //   //   contentType: req.body.contentType,
-  //   // },
-  // })
-  //   .save()
-  //   .then(place => {
-  //     console.log('New place was created');
-  //     console.log('saved place', place);
-  //   });
+  sampleFile.mv('./public/images/' + fileName, function(err) {
+    if (err) return res.status(500).send(err);
+
+    //Write to DB
+    const imgURI = 'http://10.0.2.2:3000/images/' + fileName;
+    const newPlace = new Places({
+      placeName: req.body.placeName,
+      key: req.body.key,
+      location: {
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        latitudeDelta: req.body.latitudeDelta,
+        longitudeDelta: req.body.longitudeDelta,
+      },
+      imgURI,
+    })
+      .save()
+      .then(place => {
+        res.status(200).json({message: 'Place created!'});
+      });
+  });
 });
-
-// fs.readFile('./public/images/20191021_153059.jpg').then(file => {
-//   console.log('file', file);
-// });
 
 module.exports = router;
