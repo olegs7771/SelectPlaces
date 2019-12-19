@@ -8,11 +8,11 @@ class TextForm extends Component {
         <View style={[styles.container, this.props.style]}>
           <TextInput {...this.props} />
         </View>
-        {/* <View>
+        <View>
           {this.props.error && (
             <Text style={{color: 'red'}}>{this.props.error}</Text>
           )}
-        </View> */}
+        </View>
       </View>
     );
   }

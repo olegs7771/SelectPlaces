@@ -84,11 +84,11 @@ export class Register extends Component {
               })
             }
             value={this.state.form.name}
-            // style={
-            //   this.state.errors.name
-            //     ? {backgroundColor: '#f7d5da', borderRadius: 5}
-            //     : null
-            // }
+            style={
+              this.state.errors.name
+                ? {backgroundColor: '#f7d5da', borderRadius: 5}
+                : null
+            }
             error={this.state.errors.name}
           />
           <TextForm
