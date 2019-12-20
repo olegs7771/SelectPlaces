@@ -1,31 +1,23 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import MapView from 'react-native-maps';
-import BufferToBase64 from '../utils/BufferToBase64';
+
 export default class SharedItems extends Component {
   render() {
-    // console.log('this.props.image.data', this.props.image.data);
-
-    // const dataBase64 = BufferToBase64(this.props.image.data);
-    // console.log('dataBase64', dataBase64);
-
-    // const source = {
-    //   uri: `data:${this.props.image.contentType};base64,${this.props.image.data}`,
-    // };
-    // console.log('source', source);
-
     const marker = <MapView.Marker coordinate={this.props.location} />;
+    const source = {uri: this.props.imgURI};
+    console.log('source', source);
 
     return (
       <View style={styles.container}>
         <View style={styles.containerName}>
-          <Text style={styles.textName}>{this.props.name}</Text>
+          <Text style={styles.textName}>{this.props.placeName}</Text>
         </View>
         <View //Picture & Map container
           style={{flexDirection: 'row'}}>
-          {/* <View style={styles.containerPicture}>
+          <View style={styles.containerPicture}>
             <Image style={{width: '100%', height: '100%'}} source={source} />
-          </View> */}
+          </View>
           <View style={styles.containerMap}>
             <MapView
               initialRegion={this.props.location}

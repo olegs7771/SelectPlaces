@@ -37,7 +37,7 @@ class SharedPlaces extends Component {
   }
 
   render() {
-    console.log('this.props.message', this.props.message);
+    console.log('this.props.place.places', this.props.place.places);
 
     if (this.props.place.places === null || this.props.place.loading) {
       return (
@@ -62,8 +62,8 @@ class SharedPlaces extends Component {
               renderItem={({item}) => (
                 <SharedItems
                   key={item.key}
-                  name={item.name}
-                  image={item.img}
+                  placeName={item.placeName}
+                  imgURI={item.imgURI}
                   location={item.location}
                 />
               )}
