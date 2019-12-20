@@ -8,6 +8,7 @@ const app = express();
 const PORT = 3000;
 const index = require('./routes/index');
 const places = require('./routes/places');
+const auth = require('./routes/auth');
 
 app.listen(PORT, () => {
   console.log(`App is listening on ${PORT}`);
@@ -42,3 +43,4 @@ app.use(fileUpload());
 //Routes
 app.use('/', index);
 app.use('/api', places);
+app.use('/api', auth);

@@ -3,7 +3,12 @@ import {View, Text} from 'react-native';
 
 const RegisterValid = data => {
   let errors = {};
+  //check for consistance
+  if (data.name.trim().length < 4) {
+    errors.name = 'Name at least 4 chars';
+  }
 
+  //check for empty fields
   if (data.name.length === 0) {
     errors.name = 'Name can not be empty';
   }

@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-
+//Redux
 import {connect} from 'react-redux';
+import {registerUser} from '../../actions/authAction';
+//Components
 import TextForm from '../components/TextForm';
 import Button from '../components/Button';
+//Validation
 import RegisterValid from '../../validation/RegisterValid';
 export class Register extends Component {
   constructor(props) {
@@ -48,12 +51,13 @@ export class Register extends Component {
       });
     }
 
-    const newUser = {
+    const data = {
       name: this.state.form.name,
       email: this.state.form.email,
       password: this.state.form.password,
     };
-    console.log('newUser', newUser);
+
+    await this.props.registerUser(data);
   };
 
   render() {
@@ -134,8 +138,18 @@ export class Register extends Component {
             error={this.state.errors.password}
           />
           <View>
-            <Button onPress={this._register} />
+            <Button onPress={this._register} title="Submit" />
           </View>
+        </View>
+        <View style={styles.containerLink}>
+          <Text style={{color: '#53bced', paddingTop: 20}}>
+            Already Registered?{' '}
+          </Text>
+          <Button
+            style={{width: '40%', backgroundColor: '#94e5f7'}}
+            title="SignIn"
+            onPress={() => this.props.navigation.navigate('SignIn')}
+          />
         </View>
       </View>
     );
@@ -144,7 +158,7 @@ export class Register extends Component {
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {registerUser};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);
 
@@ -171,5 +185,12 @@ const styles = StyleSheet.create({
   containerFormPortrait: {
     width: '80%',
     marginTop: 20,
+  },
+  containerLink: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+
+    width: '60%',
+    marginTop: 30,
   },
 });
