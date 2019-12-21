@@ -10,3 +10,5 @@ export const GET_ALL_PLACES = 'GET_ALL_PLACES';
 //Messages
 export const API_MESSAGE = 'API_MESSAGE';
 export const LOADING = 'LOADING';
+//Errors
+export const GET_ERRORS = 'GET_ERRORS';

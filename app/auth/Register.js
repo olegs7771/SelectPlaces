@@ -22,6 +22,7 @@ export class Register extends Component {
         isLandScape: false,
       },
       errors: {},
+      messages: {},
     };
 
     //Dimensions Listener
@@ -60,7 +61,20 @@ export class Register extends Component {
     await this.props.registerUser(data);
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    //Create message in State
+    if (prevProps.messages !== this.props.messages) {
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          messages: this.props.messages,
+        };
+      });
+    }
+  }
+
   render() {
+    console.log('this.props.messages', this.props.messages);
     const {isLandScape} = this.state.respStyles;
 
     return (
@@ -68,6 +82,11 @@ export class Register extends Component {
         style={
           isLandScape ? styles.containerLandScape : styles.containerPortrait
         }>
+        {/* {Message} */}
+        <View>
+          {this.state.messages && <Text>{this.state.messages.message}</Text>}
+        </View>
+
         <View
           style={
             isLandScape
@@ -76,6 +95,7 @@ export class Register extends Component {
           }>
           <TextForm
             placeholder="name"
+            placeholderTextColor="#fff"
             onChangeText={text =>
               this.setState(prevState => {
                 return {
@@ -91,12 +111,22 @@ export class Register extends Component {
             style={
               this.state.errors.name
                 ? {backgroundColor: '#f7d5da', borderRadius: 5}
+                : {backgroundColor: '#769ede'}
+            }
+            //style object for errors
+            style1={
+              this.state.errors.name
+                ? {
+                    color: 'red',
+                  }
                 : null
             }
             error={this.state.errors.name}
           />
           <TextForm
             placeholder="email"
+            placeholderTextColor="#fff"
+            value={this.state.form.email}
             onChangeText={text =>
               this.setState(prevState => {
                 return {
@@ -108,16 +138,24 @@ export class Register extends Component {
                 };
               })
             }
-            value={this.state.form.email}
             style={
               this.state.errors.email
                 ? {backgroundColor: '#f7d5da', borderRadius: 5}
+                : {backgroundColor: '#769ede'}
+            }
+            //style object for errors
+            style1={
+              this.state.errors.email
+                ? {
+                    color: 'red',
+                  }
                 : null
             }
             error={this.state.errors.email}
           />
           <TextForm
             placeholder="password"
+            placeholderTextColor="#fff"
             onChangeText={text =>
               this.setState(prevState => {
                 return {
@@ -133,6 +171,14 @@ export class Register extends Component {
             style={
               this.state.errors.password
                 ? {backgroundColor: '#f7d5da', borderRadius: 5}
+                : {backgroundColor: '#769ede'}
+            }
+            //style object for errors
+            style1={
+              this.state.errors.password
+                ? {
+                    color: 'red',
+                  }
                 : null
             }
             error={this.state.errors.password}
@@ -156,7 +202,9 @@ export class Register extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  messages: state.messages.messages,
+});
 
 const mapDispatchToProps = {registerUser};
 

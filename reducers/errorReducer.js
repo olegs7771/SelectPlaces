@@ -1,15 +1,15 @@
-import {API_MESSAGE} from '../actions/types';
+import {GET_ERRORS} from '../actions/types';
 
 const initialState = {
-  messages: null,
+  errors: {},
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case API_MESSAGE:
+    case GET_ERRORS:
       return {
         ...state,
-        messages: action.payload,
+        errors: action.payload,
       };
     default:
       return state;

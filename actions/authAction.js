@@ -1,4 +1,10 @@
-import {GET_AUTH_USER, REGISTER_USER, LOGIN_USER} from './types';
+import {
+  GET_AUTH_USER,
+  REGISTER_USER,
+  LOGIN_USER,
+  GET_ERRORS,
+  API_MESSAGE,
+} from './types';
 import axios from 'axios';
 
 export const getAuthUser = data => dispatch => {
@@ -12,14 +18,17 @@ export const registerUser = data => dispatch => {
   axios
     .post(' http://10.0.2.2:3000/api/register', data)
     .then(res => {
-      console.log('res.data', res.data);
+      dispatch({
+        type: API_MESSAGE,
+        payload: res.data,
+      });
     })
     .catch(err => {
       console.log('err::', err);
     });
 };
 
-//Login Registered User
+//Login  User
 export const loginUser = data => dispatch => {
   console.log('data in action', data);
 
@@ -27,8 +36,16 @@ export const loginUser = data => dispatch => {
     .post(' http://10.0.2.2:3000/api/login', data)
     .then(res => {
       console.log('res.data', res.data);
+      dispatch({
+        type: LOGIN_USER,
+        payload: res.data,
+      });
     })
     .catch(err => {
-      console.log('err::', err);
+      console.log('err.response.data :', err.response.data);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
     });
 };

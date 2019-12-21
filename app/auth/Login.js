@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-
+//Redux
 import {connect} from 'react-redux';
+import {loginUser} from '../../actions/authAction';
+
 //Components
 import TextForm from '../components/TextForm';
 import Button from '../components/Button';
+//Validation
+import LoginValid from '../../validation/LoginValid';
 
 export class Login extends Component {
   constructor(props) {
@@ -33,7 +37,45 @@ export class Login extends Component {
       });
     });
   }
-  componentDidUpdate(prevProps, prevState) {}
+  _login = async () => {
+    //Validation
+    const {errors, isValid} = LoginValid(this.state.form);
+    console.log('errors', errors);
+    console.log('isValid', isValid);
+    if (!isValid) {
+      return this.setState(prevState => {
+        return {
+          ...prevState,
+          errors: errors,
+        };
+      });
+    }
+
+    const data = {
+      email: this.state.form.email,
+      password: this.state.form.password,
+    };
+
+    await this.props.loginUser(data);
+  };
+  componentDidUpdate(prevProps, prevState) {
+    //Navigate to App if isAuthenticated === true
+    if (prevProps.auth !== this.props.auth) {
+      if (this.props.auth.isAuthenticated) {
+        this.props.navigation.navigate('Home');
+      }
+    }
+    //If Error come from API move it to state
+    if (prevProps.errors !== this.props.errors) {
+      console.log('this.props.errors', this.props.errors);
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          errors: this.props.errors,
+        };
+      });
+    }
+  }
 
   render() {
     const {isLandScape} = this.state.respStyles;
@@ -51,6 +93,7 @@ export class Login extends Component {
           }>
           <TextForm
             placeholder="email"
+            placeholderTextColor="#fff"
             onChangeText={text =>
               this.setState(prevState => {
                 return {
@@ -66,12 +109,20 @@ export class Login extends Component {
             style={
               this.state.errors.email
                 ? {backgroundColor: '#f7d5da', borderRadius: 5}
+                : {backgroundColor: '#769ede'}
+            }
+            style1={
+              this.state.errors.email
+                ? {
+                    color: 'red',
+                  }
                 : null
             }
             error={this.state.errors.email}
           />
           <TextForm
             placeholder="password"
+            placeholderTextColor="#fff"
             onChangeText={text =>
               this.setState(prevState => {
                 return {
@@ -87,12 +138,19 @@ export class Login extends Component {
             style={
               this.state.errors.password
                 ? {backgroundColor: '#f7d5da', borderRadius: 5}
+                : {backgroundColor: '#769ede'}
+            }
+            style1={
+              this.state.errors.password
+                ? {
+                    color: 'red',
+                  }
                 : null
             }
             error={this.state.errors.password}
           />
           <View>
-            <Button onPress={this._register} title="Submit" />
+            <Button onPress={this._login} title="Login" />
           </View>
         </View>
         <View style={styles.containerLink}>
@@ -110,9 +168,12 @@ export class Login extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors.errors,
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {loginUser};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
 

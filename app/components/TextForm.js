@@ -6,11 +6,12 @@ class TextForm extends Component {
     return (
       <View>
         <View style={[styles.container, this.props.style]}>
-          <TextInput {...this.props} />
+          <TextInput style={[styles.text, this.props.style]} {...this.props} />
         </View>
+
         <View>
           {this.props.error && (
-            <Text style={{color: 'red'}}>{this.props.error}</Text>
+            <Text style={{...this.props.style1}}>{this.props.error}</Text>
           )}
         </View>
       </View>
@@ -25,5 +26,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     paddingLeft: 20,
+    borderWidth: 1,
+    fontSize: 20,
+  },
+  text: {
+    paddingBottom: 30,
   },
 });
