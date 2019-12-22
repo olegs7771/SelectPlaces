@@ -5,6 +5,7 @@ import {
   GET_ERRORS,
   API_MESSAGE,
   LOADING_USER,
+  GET_AUTH_TOKEN,
 } from './types';
 import axios from 'axios';
 
@@ -25,7 +26,7 @@ export const registerUser = data => dispatch => {
       });
     })
     .catch(err => {
-      console.log('err::', err.response.data);
+      console.log('err', err.response.data);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
@@ -41,11 +42,11 @@ export const loginUser = data => dispatch => {
     .post(' http://10.0.2.2:3000/api/login', data)
     .then(res => {
       console.log('res.data', res.data);
-
-      // dispatch({
-      //   type: LOGIN_USER,
-      //   payload: res.data,
-      // });
+      //Get JWT Token from API
+      dispatch({
+        type: GET_AUTH_TOKEN,
+        payload: res.data,
+      });
     })
     .catch(err => {
       console.log('err.response.data :', err.response.data);

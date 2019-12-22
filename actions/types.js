@@ -3,6 +3,7 @@ export const GET_AUTH_USER = 'GET_AUTH_USER';
 export const REGISTER_USER = 'REGISTER_USER';
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOADING_USER = 'LOADING_USER';
+export const GET_AUTH_TOKEN = 'GET_AUTH_TOKEN';
 //Location
 export const SELECT_LOCATION = 'SELECT_LOCATION';
 //Places

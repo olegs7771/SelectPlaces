@@ -1,8 +1,14 @@
-import {REGISTER_USER, LOGIN_USER, LOADING_USER} from '../actions/types';
+import {
+  REGISTER_USER,
+  LOGIN_USER,
+  LOADING_USER,
+  GET_AUTH_TOKEN,
+} from '../actions/types';
 const initialState = {
   isAuthenticated: false,
   user: null,
   loading: false,
+  token: null,
 };
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -10,6 +16,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true,
+      };
+    case GET_AUTH_TOKEN:
+      return {
+        ...state,
+        token: action.payload,
       };
     case LOGIN_USER:
       return {

@@ -10,6 +10,8 @@ import {
 //Redux
 import {connect} from 'react-redux';
 import {loginUser} from '../../actions/authAction';
+//AsyncStorage
+import {AsyncStorage} from 'react-native';
 
 //Components
 import TextForm from '../components/TextForm';
@@ -69,6 +71,9 @@ export class Login extends Component {
   componentDidUpdate(prevProps, prevState) {
     //Navigate to App if isAuthenticated === true
     if (prevProps.auth !== this.props.auth) {
+      //if this.props.auth.token===true
+      //Persist Data
+
       if (this.props.auth.isAuthenticated) {
         this.props.navigation.navigate('Home');
       }
