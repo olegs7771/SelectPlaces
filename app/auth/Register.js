@@ -71,6 +71,15 @@ export class Register extends Component {
         };
       });
     }
+    //Get Errors from props to state
+    if (prevProps.errors !== this.props.errors) {
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          errors: this.props.errors,
+        };
+      });
+    }
   }
 
   render() {
@@ -204,6 +213,7 @@ export class Register extends Component {
 
 const mapStateToProps = state => ({
   messages: state.messages.messages,
+  errors: state.errors.errors,
 });
 
 const mapDispatchToProps = {registerUser};

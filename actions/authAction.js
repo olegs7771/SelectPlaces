@@ -4,6 +4,7 @@ import {
   LOGIN_USER,
   GET_ERRORS,
   API_MESSAGE,
+  LOADING_USER,
 } from './types';
 import axios from 'axios';
 
@@ -24,22 +25,27 @@ export const registerUser = data => dispatch => {
       });
     })
     .catch(err => {
-      console.log('err::', err);
+      console.log('err::', err.response.data);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
     });
 };
 
 //Login  User
 export const loginUser = data => dispatch => {
   console.log('data in action', data);
-
+  dispatch(isLoading());
   axios
     .post(' http://10.0.2.2:3000/api/login', data)
     .then(res => {
       console.log('res.data', res.data);
-      dispatch({
-        type: LOGIN_USER,
-        payload: res.data,
-      });
+
+      // dispatch({
+      //   type: LOGIN_USER,
+      //   payload: res.data,
+      // });
     })
     .catch(err => {
       console.log('err.response.data :', err.response.data);
@@ -48,4 +54,11 @@ export const loginUser = data => dispatch => {
         payload: err.response.data,
       });
     });
+};
+
+//Loader
+export const isLoading = () => {
+  return {
+    type: LOADING_USER,
+  };
 };

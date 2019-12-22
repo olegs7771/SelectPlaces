@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native';
+// import * as Progress from 'react-native-progress';
 //Redux
 import {connect} from 'react-redux';
 import {loginUser} from '../../actions/authAction';
@@ -23,6 +30,7 @@ export class Login extends Component {
         isLandScape: false,
       },
       errors: {},
+      messages: {},
     };
 
     //Dimensions Listener
@@ -149,9 +157,13 @@ export class Login extends Component {
             }
             error={this.state.errors.password}
           />
+
           <View>
             <Button onPress={this._login} title="Login" />
           </View>
+        </View>
+        <View style={styles.containerProgress}>
+          <ActivityIndicator size="large" color="#94e5f7" />
         </View>
         <View style={styles.containerLink}>
           <Text style={{color: '#53bced', paddingTop: 20}}>
@@ -207,5 +219,8 @@ const styles = StyleSheet.create({
 
     width: '60%',
     marginTop: 30,
+  },
+  containerProgress: {
+    marginTop: 10,
   },
 });
