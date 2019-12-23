@@ -11,7 +11,7 @@ import {
 import {connect} from 'react-redux';
 import {loginUser} from '../../actions/authAction';
 //AsyncStorage
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 //Components
 import TextForm from '../components/TextForm';
@@ -33,6 +33,7 @@ export class Login extends Component {
       },
       errors: {},
       messages: {},
+      loading: false,
     };
 
     //Dimensions Listener
@@ -68,11 +69,36 @@ export class Login extends Component {
 
     await this.props.loginUser(data);
   };
+
+  //Persist Data
+  _storeData = async token => {
+    const token_json = JSON.stringify(token);
+    console.log('token_json', token_json);
+
+    try {
+      await AsyncStorage.setItem('token', token_json).then(token => {
+        console.log('token in storage', token);
+      });
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
+
   componentDidUpdate(prevProps, prevState) {
     //Navigate to App if isAuthenticated === true
     if (prevProps.auth !== this.props.auth) {
       //if this.props.auth.token===true
-      //Persist Data
+      //_storeData()
+      if (this.props.auth.token) {
+        this._storeData(this.props.auth.token);
+      }
+
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          loading: this.props.auth.loading,
+        };
+      });
 
       if (this.props.auth.isAuthenticated) {
         this.props.navigation.navigate('Home');
@@ -167,9 +193,11 @@ export class Login extends Component {
             <Button onPress={this._login} title="Login" />
           </View>
         </View>
-        <View style={styles.containerProgress}>
-          <ActivityIndicator size="large" color="#94e5f7" />
-        </View>
+        {this.state.loading && (
+          <View style={styles.containerProgress}>
+            <ActivityIndicator size="large" color="#94e5f7" />
+          </View>
+        )}
         <View style={styles.containerLink}>
           <Text style={{color: '#53bced', paddingTop: 20}}>
             Not Registered?{' '}

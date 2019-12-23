@@ -66,9 +66,22 @@ router.post('/login', (req, res) => {
         };
         const token = jwt.sign({data}, privateKey, {expiresIn: '1h'});
         console.log('token', token);
-        res.status(200).json(token);
+        res.status(200).json({token, user});
       }
     });
+  });
+});
+
+//Get Auth by Token
+router.post('/auth_with_token', (req, res) => {
+  const decoded = jwt.decode(req.body.token);
+
+  //find user in DB
+  Auth.findOne({email: decoded.data.email}).then(user => {
+    //Compare password
+    if (user.password === decoded.data.password) {
+      res.status(200).json({user});
+    }
   });
 });
 
