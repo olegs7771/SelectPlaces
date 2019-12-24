@@ -25,6 +25,7 @@ class AuthLoadingScreen extends Component {
       this.props.navigation.navigate('authStack');
     }
   };
+
   //Retrieve token from AsyncStore
   _retrieveData = async () => {
     try {

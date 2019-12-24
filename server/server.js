@@ -46,6 +46,3 @@ app.use('/api', places);
 app.use('/api', auth);
 
 //Exercises
-// const promise = new Promise((resolve,reject)=>{
-
-// })
