@@ -17,20 +17,20 @@ export default function(state = initialState, action) {
         ...state,
         loading: true,
       };
-    case GET_AUTH_TOKEN:
+    // case GET_AUTH_TOKEN:
+    //   return {
+    //     ...state,
+    //     token: action.payload.token,
+    //     isAuthenticated: true,
+    //     user: action.payload.user,
+    //     loading: false,
+    //   };
+    case LOGIN_USER:
       return {
         ...state,
         token: action.payload.token,
         isAuthenticated: true,
         user: action.payload.user,
-        loading: false,
-      };
-    case LOGIN_USER:
-      return {
-        ...state,
-        token: action.payload.token,
-        user: action.payload,
-        isAuthenticated: true,
         loading: false,
       };
     case LOGOUT_USER:

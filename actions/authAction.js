@@ -69,7 +69,7 @@ export const auth_with_token = data => dispatch => {
       console.log('res.data', res.data);
       //Get JWT Token from API
       dispatch({
-        type: GET_AUTH_TOKEN,
+        type: LOGIN_USER,
         payload: res.data,
       });
     })
@@ -81,10 +81,12 @@ export const auth_with_token = data => dispatch => {
         payload: err.response.data,
       });
       if (Object.keys(err.response.data.session).length !== 0) {
+        console.log('error session');
+
         AsyncStorage.getAllKeys((err, keys) => {
           console.log('keys', keys);
           if (keys) {
-            AsyncStorage.removeItem('token', err => {
+            AsyncStorage.removeItem('user_token', err => {
               if (err) {
                 console.log('err', err);
               }
