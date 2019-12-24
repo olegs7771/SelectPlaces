@@ -75,6 +75,12 @@ router.post('/login', (req, res) => {
 //Get Auth by Token
 router.post('/auth_with_token', (req, res) => {
   const decoded = jwt.decode(req.body.token);
+  console.log('decoded token', decoded);
+  console.log('decoded.exp', decoded.exp);
+  console.log('Date.now()', Math.trunc(Date.now() / 1000));
+  if (decoded.exp < Math.trunc(Date.now() / 1000)) {
+    return res.status(400).json({session: 'Session expired.Please log again'});
+  }
 
   //find user in DB
   Auth.findOne({email: decoded.data.email}).then(user => {

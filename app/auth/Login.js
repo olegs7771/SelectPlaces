@@ -75,13 +75,16 @@ export class Login extends Component {
     const token_json = JSON.stringify(token);
     console.log('token_json', token_json);
 
-    try {
-      await AsyncStorage.setItem('token', token_json).then(token => {
-        console.log('token in storage', token);
+    await AsyncStorage.setItem('user_token', token_json, (err, result) => {
+      if (err) {
+        console.log('err', err);
+      }
+      console.log('result', result);
+
+      AsyncStorage.getAllKeys((err, keys) => {
+        console.log('keys', keys);
       });
-    } catch (error) {
-      console.log('Error', error);
-    }
+    });
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -90,7 +93,9 @@ export class Login extends Component {
       //if this.props.auth.token===true
       //_storeData()
       if (this.props.auth.token) {
-        this._storeData(this.props.auth.token);
+        const token = this.props.auth.token;
+
+        this._storeData(token);
       }
 
       this.setState(prevState => {
@@ -130,6 +135,11 @@ export class Login extends Component {
               ? styles.containerFormLandScape
               : styles.containerFormPortrait
           }>
+          {this.state.errors.session && (
+            <View style={styles.containerApiMessage}>
+              <Text style={{color: 'red'}}>{this.state.errors.session}</Text>
+            </View>
+          )}
           <TextForm
             placeholder="email"
             placeholderTextColor="#fff"
@@ -255,5 +265,9 @@ const styles = StyleSheet.create({
   },
   containerProgress: {
     marginTop: 10,
+  },
+  containerApiMessage: {
+    paddingVertical: 5,
+    alignItems: 'center',
   },
 });

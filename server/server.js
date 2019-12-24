@@ -46,11 +46,6 @@ app.use('/api', places);
 app.use('/api', auth);
 
 //Exercises
+// const promise = new Promise((resolve,reject)=>{
 
-const obj = {x: 5, y: 20, z: 3};
-
-const mult = ({x, y, z}) => {
-  return x * y * z;
-};
-
-console.log(mult(obj));
+// })

@@ -9,8 +9,8 @@ class WelcomePage extends Component {
     loading: false,
   };
 
-  _logout = async () => {
-    await this.props.logoutUser(this.props.auth.user._id);
+  _logout = () => {
+    this.props.logoutUser();
     setTimeout(() => {
       this.props.navigation.navigate('SignIn');
     }, 5000);

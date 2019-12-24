@@ -75,10 +75,25 @@ export const auth_with_token = data => dispatch => {
     })
     .catch(err => {
       console.log('err.response.data :', err.response.data);
+      console.log('err.response.data.session', err.response.data.session);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
       });
+      if (Object.keys(err.response.data.session).length !== 0) {
+        AsyncStorage.getAllKeys((err, keys) => {
+          console.log('keys', keys);
+          if (keys) {
+            AsyncStorage.removeItem('token', err => {
+              if (err) {
+                console.log('err', err);
+              }
+            }).then(result => {
+              console.log('result', result);
+            });
+          }
+        });
+      }
     });
 };
 
@@ -86,14 +101,16 @@ export const auth_with_token = data => dispatch => {
 export const logoutUser = data => dispatch => {
   console.log('data logout', data);
   dispatch(isLoading());
-  dispatch({
-    type: LOGOUT_USER,
-  });
+  setTimeout(() => {
+    dispatch({
+      type: LOGOUT_USER,
+    });
+  }, 5000);
 
   AsyncStorage.getAllKeys((err, keys) => {
     console.log('keys', keys);
     if (keys) {
-      AsyncStorage.removeItem('token', err => {
+      AsyncStorage.removeItem('user_token', err => {
         if (err) {
           console.log('err', err);
         }
