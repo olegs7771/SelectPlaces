@@ -57,7 +57,7 @@ export const loginUser = data => dispatch => {
       });
     });
 };
-//Login  User
+//Request token in every reload with update exp
 export const auth_with_token = data => dispatch => {
   console.log('token data in action', data);
   const token = JSON.parse(data.token);
