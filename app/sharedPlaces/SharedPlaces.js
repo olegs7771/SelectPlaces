@@ -19,6 +19,7 @@ class SharedPlaces extends Component {
       respStyle: {
         landScape: false,
       },
+      messages: {},
     };
     Dimensions.addEventListener('change', dims => {
       this.setState(prevState => {
@@ -35,17 +36,28 @@ class SharedPlaces extends Component {
   componentDidMount() {
     this.props.getPlace();
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.messages !== this.props.messages) {
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          messages: this.props.messages.messages,
+        };
+      });
+      console.log('this.state.messages.message', this.state.messages.message);
+    }
+  }
 
   render() {
-    console.log('this.props.place.places', this.props.place.places);
+    console.log();
 
     if (this.props.place.places === null || this.props.place.loading) {
       return (
         <View style={styles.container}>
           <Text style={styles.textTitle}> Here Shared Places </Text>
           <View style={{flex: 1, paddingBottom: 20, justifyContent: 'center'}}>
-            {this.props.message.message ? (
-              <Text>{this.props.message.message.message}</Text>
+            {this.state.messages.message ? (
+              <Text>{this.state.messages.message}</Text>
             ) : (
               <ActivityIndicator size="large" color="#0000ff" />
             )}
@@ -77,7 +89,7 @@ class SharedPlaces extends Component {
 
 const mapStateToProps = state => ({
   place: state.place,
-  message: state.message,
+  messages: state.messages,
 });
 
 const mapDispatchToProps = {getPlace};

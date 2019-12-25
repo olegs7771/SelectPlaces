@@ -8,7 +8,7 @@ const moment = require('moment');
 
 router.get('/getPlace', (req, res) => {
   Places.find().then(places => {
-    if (!places.length > 0) {
+    if (places.length === 0) {
       return res.status(200).json({message: 'No place to show'});
     }
     res.status(200).json(places);

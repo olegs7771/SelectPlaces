@@ -87,15 +87,11 @@ export const auth_with_token = data => dispatch => {
       });
     })
     .catch(err => {
-      console.log('err.response.data :', err.response.data);
-      console.log('err.response.data.session', err.response.data.session);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
       });
       if (Object.keys(err.response.data.session).length !== 0) {
-        console.log('error session');
-
         const removeToken = async () => {
           await AsyncStorage.getItem('user_token').then(value => {
             console.log('value', value);

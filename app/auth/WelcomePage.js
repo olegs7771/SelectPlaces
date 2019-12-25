@@ -37,6 +37,14 @@ class WelcomePage extends Component {
         };
       });
     }
+    if (prevState.errors !== this.state.errors) {
+      //After this.state.errors.session show message and redirect to login
+      if (this.state.errors.session) {
+        setTimeout(() => {
+          this.props.navigation.navigate('SignIn');
+        }, 3000);
+      }
+    }
   }
 
   render() {
