@@ -57,20 +57,33 @@ export const loginUser = data => dispatch => {
       });
     });
 };
+
 //Request token in every reload with update exp
 export const auth_with_token = data => dispatch => {
-  console.log('token data in action', data);
+  console.log('token from authLoadingScreen', data);
   const token = JSON.parse(data.token);
 
-  console.log('token', token);
+  console.log('token after JSON.parse', token);
   axios
     .post(' http://10.0.2.2:3000/api/auth_with_token', {token})
     .then(res => {
       console.log('res.data', res.data);
-      //Get JWT Token from API
-      dispatch({
-        type: LOGIN_USER,
-        payload: res.data,
+
+      AsyncStorage.removeItem('user_token', () => {
+        AsyncStorage.setItem(
+          'user_token',
+          JSON.stringify(res.data.token),
+          () => {
+            dispatch({
+              type: LOGIN_USER,
+              payload: res.data,
+            });
+
+            AsyncStorage.getItem('user_token').then(token => {
+              console.log('token updated', token);
+            });
+          },
+        );
       });
     })
     .catch(err => {
@@ -83,18 +96,17 @@ export const auth_with_token = data => dispatch => {
       if (Object.keys(err.response.data.session).length !== 0) {
         console.log('error session');
 
-        AsyncStorage.getAllKeys((err, keys) => {
-          console.log('keys', keys);
-          if (keys) {
-            AsyncStorage.removeItem('user_token', err => {
-              if (err) {
-                console.log('err', err);
-              }
-            }).then(result => {
-              console.log('result', result);
-            });
-          }
-        });
+        const removeToken = async () => {
+          await AsyncStorage.getItem('user_token').then(value => {
+            console.log('value', value);
+            if (value !== null) {
+              AsyncStorage.removeItem('user_token').then(() => {
+                console.log('Token delete seccessfully');
+              });
+            }
+          });
+        };
+        removeToken();
       }
     });
 };

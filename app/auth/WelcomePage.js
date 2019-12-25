@@ -7,6 +7,7 @@ import {logoutUser} from '../../actions/authAction';
 class WelcomePage extends Component {
   state = {
     loading: false,
+    errors: {},
   };
 
   _logout = () => {
@@ -23,6 +24,16 @@ class WelcomePage extends Component {
         return {
           ...prevState,
           loading: this.props.auth.loading,
+        };
+      });
+    }
+    //If Error come from API move it to state
+    if (prevProps.errors !== this.props.errors) {
+      console.log('this.props.errors', this.props.errors);
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          errors: this.props.errors,
         };
       });
     }
@@ -49,6 +60,11 @@ class WelcomePage extends Component {
             <ActivityIndicator size="large" color="#94e5f7" />
           </View>
         )}
+        {this.state.errors.session && (
+          <View style={styles.containerApiMessage}>
+            <Text style={{color: 'red'}}>{this.state.errors.session}</Text>
+          </View>
+        )}
       </View>
     );
   }
@@ -56,6 +72,7 @@ class WelcomePage extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  errors: state.errors.errors,
 });
 
 export default connect(mapStateToProps, {logoutUser})(WelcomePage);
@@ -89,5 +106,9 @@ const styles = StyleSheet.create({
   },
   containerProgress: {
     marginTop: 10,
+  },
+  containerApiMessage: {
+    paddingVertical: 5,
+    alignItems: 'center',
   },
 });

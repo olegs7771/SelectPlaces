@@ -30,6 +30,8 @@ class AuthLoadingScreen extends Component {
   _retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('user_token');
+      console.log('value token in storage', value);
+
       if (value !== null) {
         // console.log('value', value);
         // from authAction

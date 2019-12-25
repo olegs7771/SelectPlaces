@@ -51,8 +51,7 @@ export class Login extends Component {
   _login = async () => {
     //Validation
     const {errors, isValid} = LoginValid(this.state.form);
-    console.log('errors', errors);
-    console.log('isValid', isValid);
+
     if (!isValid) {
       return this.setState(prevState => {
         return {
@@ -70,10 +69,10 @@ export class Login extends Component {
     await this.props.loginUser(data);
   };
 
-  //Persist Data
+  //Persist Data in AsyncStorage
   _storeData = async token => {
     const token_json = JSON.stringify(token);
-    console.log('token_json', token_json);
+    console.log('token from redux state after json', token_json);
 
     await AsyncStorage.setItem('user_token', token_json, (err, result) => {
       if (err) {
@@ -82,7 +81,7 @@ export class Login extends Component {
       console.log('result', result);
 
       AsyncStorage.getAllKeys((err, keys) => {
-        console.log('keys', keys);
+        console.log('key of new token', keys);
       });
     });
   };
@@ -94,6 +93,7 @@ export class Login extends Component {
       //_storeData()
       if (this.props.auth.token) {
         const token = this.props.auth.token;
+        console.log('token from redux state', token);
 
         this._storeData(token);
       }
@@ -135,11 +135,6 @@ export class Login extends Component {
               ? styles.containerFormLandScape
               : styles.containerFormPortrait
           }>
-          {this.state.errors.session && (
-            <View style={styles.containerApiMessage}>
-              <Text style={{color: 'red'}}>{this.state.errors.session}</Text>
-            </View>
-          )}
           <TextForm
             placeholder="email"
             placeholderTextColor="#fff"
@@ -265,9 +260,5 @@ const styles = StyleSheet.create({
   },
   containerProgress: {
     marginTop: 10,
-  },
-  containerApiMessage: {
-    paddingVertical: 5,
-    alignItems: 'center',
   },
 });

@@ -65,7 +65,7 @@ router.post('/login', (req, res) => {
           password: user.password,
         };
         const token = jwt.sign({data}, privateKey, {expiresIn: '1m'});
-        console.log('token', token);
+        console.log('token /login', token);
         res.status(200).json({token, user});
       }
     });
@@ -80,7 +80,7 @@ router.post('/auth_with_token', (req, res) => {
   console.log('decoded token', decoded);
   console.log('decoded.exp', decoded.exp);
   console.log('Date.now()', Math.trunc(Date.now() / 1000));
-  if (decoded.exp < Math.trunc(Date.now() / 1000)) {
+  if (decoded.exp > Math.trunc(Date.now() / 1000)) {
     return res.status(400).json({session: 'Session expired.Please log again'});
   }
 
@@ -94,7 +94,7 @@ router.post('/auth_with_token', (req, res) => {
         email: user.email,
         password: decoded.data.password,
       };
-      const token = jwt.sign({data: tokenBody}, privateKey, {expiresIn: '2m'});
+      const token = jwt.sign({data: tokenBody}, privateKey, {expiresIn: '1m'});
 
       res.status(200).json({user, token});
     }
