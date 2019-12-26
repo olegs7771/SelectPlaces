@@ -1,32 +1,58 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import MapView from 'react-native-maps';
+import SharedPlaceModal from '../modals/SharedPlaceModal';
 
 export default class SharedItems extends Component {
+  state = {
+    isShowedModal: false,
+  };
+
+  _shoModal = () => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        isShowedModal: true,
+      };
+    });
+  };
   render() {
     const marker = <MapView.Marker coordinate={this.props.location} />;
     const source = {uri: this.props.imgURI};
-    console.log('source', source);
+    const placeName = this.props.placeName;
 
     return (
-      <View style={styles.container}>
-        <View style={styles.containerName}>
-          <Text style={styles.textName}>{this.props.placeName}</Text>
-        </View>
-        <View //Picture & Map container
-          style={{flexDirection: 'row'}}>
-          <View style={styles.containerPicture}>
-            <Image style={{width: '100%', height: '100%'}} source={source} />
+      <TouchableWithoutFeedback onPress={this._shoModal}>
+        <View style={styles.container}>
+          <SharedPlaceModal
+            showModal={this.state.isShowedModal}
+            source={source}
+            placeName={placeName}
+          />
+          <View style={styles.containerName}>
+            <Text style={styles.textName}>{this.props.placeName}</Text>
           </View>
-          <View style={styles.containerMap}>
-            <MapView
-              initialRegion={this.props.location}
-              style={{width: '100%', height: 200}}>
-              {marker}
-            </MapView>
+          <View //Picture & Map container
+            style={{flexDirection: 'row'}}>
+            <View style={styles.containerPicture}>
+              <Image style={{width: '100%', height: '100%'}} source={source} />
+            </View>
+            <View style={styles.containerMap}>
+              <MapView
+                initialRegion={this.props.location}
+                style={{width: '100%', height: 200}}>
+                {marker}
+              </MapView>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
