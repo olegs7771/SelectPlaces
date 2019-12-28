@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
 //Login User
 
 router.post('/login', (req, res) => {
-  console.log('req.body', req.body);
+  // console.log('req.body', req.body);
   const email = req.body.email;
   Auth.findOne({email}).then(user => {
     if (!user) {
@@ -65,7 +65,7 @@ router.post('/login', (req, res) => {
           password: user.password,
         };
         const token = jwt.sign({data}, privateKey, {expiresIn: '1h'});
-        console.log('token /login', token);
+        // console.log('token /login', token);
         res.status(200).json({token, user});
       }
     });

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import {
   Text,
   View,
@@ -8,47 +9,53 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import SharedPlaceModal from '../modals/SharedPlaceModal';
+import {connect} from 'react-redux';
+import {selectPlace} from '../../actions/placesAction';
 
-export default class SharedItems extends Component {
-  state = {
-    isShowedModal: false,
+class SharedItems extends Component {
+  _selectPlace = () => {
+    const data = {
+      placeName: this.props.placeName,
+      date: this.props.date,
+      coordinate: this.props.location,
+      imgURI: this.props.imgURI,
+    };
+
+    this.props.selectPlace(data);
+    this.props.navigate('SelectedPlace');
   };
 
-  _shoModal = () => {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        isShowedModal: true,
-      };
-    });
-  };
   render() {
     const marker = <MapView.Marker coordinate={this.props.location} />;
     const source = {uri: this.props.imgURI};
     const placeName = this.props.placeName;
+    const location = this.props.location;
+    const id = this.props.id;
 
     return (
-      <TouchableWithoutFeedback onPress={this._shoModal}>
+      <TouchableWithoutFeedback onPress={this._selectPlace}>
         <View style={styles.container}>
-          <SharedPlaceModal
+          {/* <SharedPlaceModal
             showModal={this.state.isShowedModal}
             source={source}
             placeName={placeName}
-          />
-          <View style={styles.containerName}>
-            <Text style={styles.textName}>{this.props.placeName}</Text>
+            initialRegion={location}
+            marker={marker}
+            id={id}
+            navigate={this.props.navigate}
+          /> */}
+
+          <View style={styles.containerPicture}>
+            <Image style={{width: '100%', height: '100%'}} source={source} />
           </View>
-          <View //Picture & Map container
-            style={{flexDirection: 'row'}}>
-            <View style={styles.containerPicture}>
-              <Image style={{width: '100%', height: '100%'}} source={source} />
+          <View // Date&Name Group Container
+            style={styles.containerGroup}>
+            <View style={styles.containerName}>
+              <Text style={styles.textName}>{this.props.placeName}</Text>
             </View>
-            <View style={styles.containerMap}>
-              <MapView
-                initialRegion={this.props.location}
-                style={{width: '100%', height: 200}}>
-                {marker}
-              </MapView>
+
+            <View style={styles.containerDate}>
+              <Text>Date {moment(this.props.date).format('lll')}</Text>
             </View>
           </View>
         </View>
@@ -57,36 +64,37 @@ export default class SharedItems extends Component {
   }
 }
 
+export default connect(null, {selectPlace})(SharedItems);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    flexDirection: 'row',
     borderWidth: 1,
     borderColor: 'green',
     width: '90%',
-    height: '70%',
-    alignSelf: 'center',
+    height: 50,
     marginBottom: 5,
+  },
+  containerGroup: {
+    flex: 1,
+    width: '48%',
+    alignItems: 'center',
+  },
+  containerPicture: {
+    padding: 1,
+    width: '20%',
   },
   containerName: {
     flex: 1,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingVertical: 3,
   },
-  containerPicture: {
-    flex: 1,
-    padding: 5,
-    paddingBottom: 50,
-    width: '45%',
-  },
-  containerMap: {
-    flex: 1,
-    padding: 5,
-    paddingBottom: 15,
-    width: '45%',
+  containerDate: {
+    paddingVertical: 3,
+    paddingLeft: 10,
   },
   textName: {
-    fontSize: 20,
+    fontSize: 16,
     fontFamily: 'bold',
     alignSelf: 'center',
   },

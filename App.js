@@ -6,6 +6,7 @@ import {createSwitchNavigator} from 'react-navigation';
 import WelcomePage from './app/auth/WelcomePage';
 import SelectPlace from './app/places/SelectPlace';
 import SharedPlaces from './app/sharedPlaces/SharedPlaces';
+import SharedPlaceSelect from './app/sharedPlaces/SharedPlaceSelect';
 import Register from './app/auth/Register';
 import Login from './app/auth/Login';
 import AuthLoadingScreen from './app/auth/AuthLoadingScreen';
@@ -21,6 +22,7 @@ const appStack = createStackNavigator(
     Home: {screen: WelcomePage},
     Places: {screen: SelectPlace},
     SharedPlaces: {screen: SharedPlaces},
+    SelectedPlace: {screen: SharedPlaceSelect},
   },
   {
     initialRouteName: 'Home',

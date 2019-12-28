@@ -8,7 +8,10 @@ export const LOGOUT_USER = 'LOGOUT_USER';
 export const SELECT_LOCATION = 'SELECT_LOCATION';
 //Places
 export const ADD_PLACE = 'ADD_PLACE';
+export const SELECT_PLACE = 'SELECT_PLACE';
+
 export const GET_ALL_PLACES = 'GET_ALL_PLACES';
+export const DELETE_PLACE = 'DELETE_PLACE';
 //Messages
 export const API_MESSAGE = 'API_MESSAGE';
 //Errors

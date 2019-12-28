@@ -64,4 +64,13 @@ router.post('/upload', (req, res) => {
   });
 });
 
+//delete place
+router.post('/delete', (req, res) => {
+  console.log('req.body.id', req.body.id);
+  res.status(200).json({deleted: 'Place has been deleted'});
+  // Places.findOneAndDelete({_id: req.body.id}).then(place => {
+  //   res.status(200).json({deleted: 'Place has been deleted'});
+  // });
+});
+
 module.exports = router;

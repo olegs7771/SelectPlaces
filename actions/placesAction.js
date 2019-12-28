@@ -4,6 +4,8 @@ import {
   GET_ALL_PLACES,
   API_MESSAGE,
   LOADING,
+  DELETE_PLACE,
+  SELECT_PLACE,
 } from './types';
 import axios from 'axios';
 export const addPlace = data => {
@@ -62,6 +64,30 @@ export const getPlace = () => dispatch => {
         payload: res.data,
       });
     }
+  });
+};
+
+//Select Place
+export const selectPlace = data => dispatch => {
+  console.log('data selected plce', data);
+  dispatch({
+    type: SELECT_PLACE,
+    payload: data,
+  });
+};
+
+//Delete Place
+export const deletePlace = data => dispatch => {
+  console.log('data.id', data.id);
+  axios.post('http://10.0.2.2:3000/api/delete', data).then(res => {
+    dispatch({
+      type: API_MESSAGE,
+      payload: res.data,
+    });
+    dispatch({
+      type: DELETE_PLACE,
+      payload: data.id,
+    });
   });
 };
 

@@ -44,13 +44,10 @@ class SharedPlaces extends Component {
           messages: this.props.messages.messages,
         };
       });
-      console.log('this.state.messages.message', this.state.messages.message);
     }
   }
 
   render() {
-    console.log();
-
     if (this.props.place.places === null || this.props.place.loading) {
       return (
         <View style={styles.container}>
@@ -68,7 +65,15 @@ class SharedPlaces extends Component {
       return (
         <View style={styles.container}>
           <Text style={styles.textTitle}> Here Shared Places</Text>
-          <View style={{flex: 1, width: '100%', paddingBottom: 20}}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              width: '100%',
+              paddingBottom: 20,
+
+              paddingLeft: '10%',
+            }}>
             <FlatList
               data={this.props.place.places}
               renderItem={({item}) => (
@@ -77,6 +82,9 @@ class SharedPlaces extends Component {
                   placeName={item.placeName}
                   imgURI={item.imgURI}
                   location={item.location}
+                  id={item._id}
+                  date={item.date}
+                  navigate={this.props.navigation.navigate}
                 />
               )}
             />
@@ -99,7 +107,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(SharedPlaces);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
     justifyContent: 'flex-start',
 
     alignItems: 'center',

@@ -60,14 +60,12 @@ export const loginUser = data => dispatch => {
 
 //Request token in every reload with update exp
 export const auth_with_token = data => dispatch => {
-  console.log('token from authLoadingScreen', data);
   const token = JSON.parse(data.token);
 
-  console.log('token after JSON.parse', token);
   axios
     .post(' http://10.0.2.2:3000/api/auth_with_token', {token})
     .then(res => {
-      console.log('res.data', res.data);
+      // console.log('res.data', res.data);
 
       AsyncStorage.removeItem('user_token', () => {
         AsyncStorage.setItem(
@@ -80,7 +78,7 @@ export const auth_with_token = data => dispatch => {
             });
 
             AsyncStorage.getItem('user_token').then(token => {
-              console.log('token updated', token);
+              // console.log('token updated', token);
             });
           },
         );
