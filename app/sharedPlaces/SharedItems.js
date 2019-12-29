@@ -19,6 +19,7 @@ class SharedItems extends Component {
       date: this.props.date,
       coordinate: this.props.location,
       imgURI: this.props.imgURI,
+      id: this.props.id,
     };
 
     this.props.selectPlace(data);
@@ -35,16 +36,6 @@ class SharedItems extends Component {
     return (
       <TouchableWithoutFeedback onPress={this._selectPlace}>
         <View style={styles.container}>
-          {/* <SharedPlaceModal
-            showModal={this.state.isShowedModal}
-            source={source}
-            placeName={placeName}
-            initialRegion={location}
-            marker={marker}
-            id={id}
-            navigate={this.props.navigate}
-          /> */}
-
           <View style={styles.containerPicture}>
             <Image style={{width: '100%', height: '100%'}} source={source} />
           </View>

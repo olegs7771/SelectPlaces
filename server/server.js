@@ -46,12 +46,3 @@ app.use('/api', places);
 app.use('/api', auth);
 
 //Exercises
-
-// var vowelsCount = 0;
-// var vowels = ['a', 'e', 'i', 'o', 'u'];
-// var str = 'Today is best day of my life';
-
-// for (let index = 0; index < str.length; index++) {
-//   const element = array[index];
-
-// }

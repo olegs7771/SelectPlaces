@@ -15,7 +15,7 @@ import MapLocation from './MapLocation';
 import {connect} from 'react-redux';
 import {addPlace, createPlace, getPlace} from '../../actions/placesAction';
 
-const uuid = require('uuid/v1');
+// const uuid = require('uuid/v1');
 
 export class SelectPlace extends Component {
   constructor(props) {
@@ -34,6 +34,7 @@ export class SelectPlace extends Component {
       isImagePicked: false,
       fileURI: null,
       fileTYPE: null,
+      messages: {},
     };
     Dimensions.addEventListener('change', dims => {
       console.log('dims.window.width', dims.window.width);
@@ -60,6 +61,18 @@ export class SelectPlace extends Component {
         fileURI: null,
       };
     });
+  }
+
+  //Update Errors and Messages from redux
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.messages !== this.props.messages) {
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          messages: this.props.messages.messages,
+        };
+      });
+    }
   }
 
   _pickImageStorage = () => {
@@ -129,8 +142,16 @@ export class SelectPlace extends Component {
     };
     fd.append('sampleFile', options);
 
-    console.log('Array', Array.from(fd._parts));
     this.props.createPlace(fd);
+
+    setTimeout(() => {
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          messages: {},
+        };
+      });
+    }, 5000);
   };
 
   render() {
@@ -226,6 +247,11 @@ export class SelectPlace extends Component {
             </View>
             <MapLocation />
           </View>
+          {this.state.messages.message && (
+            <View>
+              <Text>{this.state.messages.message}</Text>
+            </View>
+          )}
 
           <View
             style={{
@@ -300,6 +326,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   location: state.location,
+  messages: state.messages,
 });
 
 const mapDispatchToProps = {addPlace, createPlace, getPlace};

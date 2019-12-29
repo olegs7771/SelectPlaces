@@ -6,6 +6,7 @@ import {
   Dimensions,
   FlatList,
   ActivityIndicator,
+  Button,
 } from 'react-native';
 import SharedItems from './SharedItems';
 
@@ -34,6 +35,8 @@ class SharedPlaces extends Component {
   }
 
   componentDidMount() {
+    console.log('sharing places cdm');
+
     this.props.getPlace();
   }
   componentDidUpdate(prevProps, prevState) {
@@ -58,6 +61,12 @@ class SharedPlaces extends Component {
             ) : (
               <ActivityIndicator size="large" color="#0000ff" />
             )}
+          </View>
+          <View>
+            <Button
+              title="Back"
+              onPress={() => this.props.navigation.navigate('Home')}
+            />
           </View>
         </View>
       );

@@ -4,7 +4,6 @@ import {
   GET_ALL_PLACES,
   API_MESSAGE,
   LOADING,
-  DELETE_PLACE,
   SELECT_PLACE,
 } from './types';
 import axios from 'axios';
@@ -42,6 +41,10 @@ export const createPlace = FD => dispatch => {
   })
     .then(res => {
       console.log('res.data', res.data);
+      dispatch({
+        type: API_MESSAGE,
+        payload: res.data,
+      });
     })
     .catch(err => {
       console.log('err::', err);
@@ -78,15 +81,12 @@ export const selectPlace = data => dispatch => {
 
 //Delete Place
 export const deletePlace = data => dispatch => {
-  console.log('data.id', data.id);
   axios.post('http://10.0.2.2:3000/api/delete', data).then(res => {
+    console.log('res.data', res.data);
+
     dispatch({
       type: API_MESSAGE,
       payload: res.data,
-    });
-    dispatch({
-      type: DELETE_PLACE,
-      payload: data.id,
     });
   });
 };

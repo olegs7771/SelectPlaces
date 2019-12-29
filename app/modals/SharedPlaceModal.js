@@ -46,8 +46,8 @@ class SharedPlaceModal extends Component {
             showModalState: false,
           };
         });
+        this.props.navigation.push('SharedPlaces');
       }, 3000);
-      this.props.navigate('Home');
     }
   }
   _closeModal = () => {
@@ -57,6 +57,7 @@ class SharedPlaceModal extends Component {
         showModalState: false,
       };
     });
+    this.props.navigation.push('SharedPlaces');
   };
   _deletePlace = () => {
     console.log('delete id', this.props.id);

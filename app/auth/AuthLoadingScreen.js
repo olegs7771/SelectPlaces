@@ -45,7 +45,7 @@ class AuthLoadingScreen extends Component {
   render() {
     return (
       <View>
-        <Text> Auth Loader </Text>
+        <Text> </Text>
       </View>
     );
   }

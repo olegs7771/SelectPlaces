@@ -41,7 +41,7 @@ router.post('/upload', (req, res) => {
         Math.trunc(Math.random() * 10000000) +
         mime;
 
-  sampleFile.mv('./public/images/' + fileName, function(err) {
+  sampleFile.mv('./public/images/' + fileName, err => {
     if (err) return res.status(500).send(err);
 
     //Write to DB
@@ -59,6 +59,9 @@ router.post('/upload', (req, res) => {
     })
       .save()
       .then(place => {
+        if (!place) {
+          return console.log('new place was not created!');
+        }
         res.status(200).json({message: 'Place created!'});
       });
   });
@@ -67,10 +70,37 @@ router.post('/upload', (req, res) => {
 //delete place
 router.post('/delete', (req, res) => {
   console.log('req.body.id', req.body.id);
-  res.status(200).json({deleted: 'Place has been deleted'});
-  // Places.findOneAndDelete({_id: req.body.id}).then(place => {
-  //   res.status(200).json({deleted: 'Place has been deleted'});
-  // });
+  // res.status(200).json({deleted: 'Place has been deleted'});
+  Places.findOneAndDelete({_id: req.body.id}).then(place => {
+    if (!place) {
+      return res.status(200).json({deleted: 'Error to delete place'});
+    }
+    console.log('place to delete', place);
+    //Check if file exists
+
+    const filePathToDelete = place.imgURI.replace(
+      'http://10.0.2.2:3000',
+      './public',
+    );
+    console.log('filePathToDelete', filePathToDelete);
+    fs.ensureFile(filePathToDelete)
+      .then(() => {
+        console.log('There is a file');
+        //Remove File
+        fs.unlink(filePathToDelete)
+          .then(() => {
+            console.log(`file ${place.placeName} was deleted`);
+          })
+          .catch(err => {
+            console.log(`file ${place.placeName} was not deleted `, err);
+          });
+      })
+      .catch(err => {
+        console.log('err:', err);
+      });
+
+    res.status(200).json({deleted: 'Place has been deleted'});
+  });
 });
 
 module.exports = router;

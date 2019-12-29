@@ -19,7 +19,7 @@ class WelcomePage extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     //Navigate to App if isAuthenticated === true
-    if (prevProps.auth !== this.props.auth) {
+    if (prevProps.auth.isAuthenticated !== this.props.auth.isAuthenticated) {
       this.setState(prevState => {
         return {
           ...prevState,

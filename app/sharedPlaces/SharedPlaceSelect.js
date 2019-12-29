@@ -1,42 +1,73 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Image, TouchableHighlight} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import MapView from 'react-native-maps';
-
 import {connect} from 'react-redux';
+import SharedPlaceModal from '../modals/SharedPlaceModal';
 
 export class SharedPlaceSelect extends Component {
+  state = {
+    isShowedModal: false,
+  };
+
+  _showModal = () => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        isShowedModal: true,
+      };
+    });
+  };
+
   render() {
-    const source = {uri: this.props.place.selectedPlace.imgURI};
-    console.log(
-      'this.props.place.selectedPlace.imgURI',
-      this.props.place.selectedPlace.imgURI,
-    );
+    const {
+      placeName,
+      coordinate,
+      id,
+      date,
+      imgURI,
+    } = this.props.place.selectedPlace;
+    const source = {uri: imgURI};
 
-    const marker = (
-      <MapView.Marker coordinate={this.props.place.selectedPlace.coordinate} />
-    );
+    const marker = <MapView.Marker coordinate={coordinate} />;
     return (
-      <View style={styles.container}>
-        <View //TextTitle Container
-          style={styles.containerTitle}>
-          <Text style={styles.textTitle}>
-            {this.props.place.selectedPlace.placeName}
-          </Text>
-        </View>
+      <TouchableWithoutFeedback onPress={this._showModal}>
+        <View style={styles.container}>
+          <SharedPlaceModal
+            showModal={this.state.isShowedModal}
+            source={source}
+            placeName={placeName}
+            initialRegion={coordinate}
+            marker={marker}
+            id={id}
+            navigation={this.props.navigation}
+          />
+          <View //TextTitle Container
+            style={styles.containerTitle}>
+            <Text style={styles.textTitle}>{placeName}</Text>
+          </View>
 
-        <View //Image&&Map Group Container
-          style={styles.containerGroup}>
-          <View style={styles.containerPicture}>
-            <Image style={{width: '100%', height: '100%'}} source={source} />
-          </View>
-          <View //Map Container
-            style={styles.containerMap}>
-            <MapView
-              initialRegion={this.props.place.selectedPlace.coordinate}
-              style={{width: '100%', height: '100%'}}></MapView>
+          <View //Image&&Map Group Container
+            style={styles.containerGroup}>
+            <View style={styles.containerPicture}>
+              <Image source={source} style={{width: '100%', height: '100%'}} />
+            </View>
+            <View //Map Container
+              style={styles.containerMap}>
+              <MapView
+                initialRegion={coordinate}
+                style={{width: '100%', height: '100%'}}>
+                {marker}
+              </MapView>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -52,19 +83,28 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     width: '100%',
+    borderWidth: 1,
   },
   containerTitle: {
     borderWidth: 1,
     width: '50%',
+    paddingVertical: 5,
+    marginTop: 10,
+    alignItems: 'center',
   },
   containerPicture: {
     width: '50%',
-    height: 200,
+    height: 250,
   },
   containerMap: {
     width: '50%',
     height: 250,
     borderWidth: 1,
+  },
+  containerGroup: {
+    width: '90%',
+    flexDirection: 'row',
+    marginTop: 10,
   },
   textTitle: {
     fontSize: 20,
