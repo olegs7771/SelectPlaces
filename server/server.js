@@ -46,3 +46,20 @@ app.use('/api', places);
 app.use('/api', auth);
 
 //Exercises
+
+var greeting = (() => {
+  let greetString = "Hey, that's ";
+  const greet = name => {
+    return greetString + name;
+  };
+  let changeGreeting = newGreeting => {
+    greetString = newGreeting;
+  };
+  return {
+    greet,
+    changeGreeting,
+  };
+})();
+
+console.log(greeting.greet('Oleg'));
+console.log(greeting.changeGreeting('Oleg'));
