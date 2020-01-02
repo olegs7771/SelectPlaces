@@ -46,3 +46,18 @@ app.use('/api', places);
 app.use('/api', auth);
 
 //Exercises
+
+const nums = {
+  a: 10,
+  b: 20,
+  c: 'string',
+  d: 12,
+};
+
+const sumObjValues = obj => {
+  for (let j in obj) {
+    return nums[j];
+  }
+};
+
+console.log(sumObjValues(nums));
