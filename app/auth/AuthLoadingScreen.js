@@ -1,17 +1,25 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import {auth_with_token} from '../../actions/authAction';
 //AsyncStorage
 import AsyncStorage from '@react-native-community/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 
 class AuthLoadingScreen extends Component {
   constructor(props) {
     super(props);
-
     this._retrieveData();
     this._getAuthUserAsync();
+    this._hideSplash();
+    console.log('SplashScreen', SplashScreen);
   }
+
+  _hideSplash = () => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 3000);
+  };
 
   _getAuthUserAsync = async () => {
     // const {isAuthenticated} = this.props.auth;
@@ -45,7 +53,7 @@ class AuthLoadingScreen extends Component {
   render() {
     return (
       <View>
-        <Text> </Text>
+        <Text> Loader...</Text>
       </View>
     );
   }
