@@ -47,36 +47,21 @@ app.use('/api', auth);
 
 //Exercises
 
-<<<<<<< HEAD
-const nums = {
-  a: 10,
-  b: 20,
-  c: 'string',
-  d: 12,
-};
+const nums = [10, -12, 30, -1, -8, 14, -33, 20];
 
-const sumObjValues = obj => {
-  for (let j in obj) {
-    return nums[j];
+const sumPlusMinus = arr => {
+  let plus = 0;
+  let minus = 0;
+  for (let i = 0; i < arr.length; i++) {
+    const element = arr[i];
+    // console.log('element', element);
+    if (element < 0) {
+      minus = +element;
+    } else if (element > 0) {
+      plus = +element;
+    }
   }
+  return plus, minus;
 };
 
-console.log(sumObjValues(nums));
-=======
-var greeting = (() => {
-  let greetString = "Hey, that's ";
-  const greet = name => {
-    return greetString + name;
-  };
-  let changeGreeting = newGreeting => {
-    greetString = newGreeting;
-  };
-  return {
-    greet,
-    changeGreeting,
-  };
-})();
-
-console.log(greeting.greet('Oleg'));
-console.log(greeting.changeGreeting('Oleg'));
->>>>>>> 414414b7f57a42663ea04bda8127cfa0c3cbdd18
+sumPlusMinus(nums);
