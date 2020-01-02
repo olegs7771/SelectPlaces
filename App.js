@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
+//Navigation
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createSwitchNavigator} from 'react-navigation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
+
+//Screens
 import WelcomePage from './app/auth/WelcomePage';
 import SelectPlace from './app/places/SelectPlace';
 import SharedPlaces from './app/sharedPlaces/SharedPlaces';
@@ -16,16 +21,43 @@ import {Provider} from 'react-redux';
 import configureStore from './store';
 const store = configureStore();
 
-//App Stack
-const appStack = createStackNavigator(
+//Bottom Tab Navigator
+const TabNavigator = createBottomTabNavigator(
   {
     Home: {screen: WelcomePage},
+    MyPlaces: {screen: SharedPlaces},
+    SelectPlace: {screen: SelectPlace},
+  },
+  {
+    defaultNavigationOptions: ({navigation}) => ({
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        const {routeName} = navigation.state;
+        let IconComponent = Ionicons;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = 'ios-home';
+        } else if (routeName === 'MyPlaces') {
+          iconName = `ios-images`;
+        } else if (routeName === 'SelectPlace') {
+          iconName = 'ios-aperture';
+        }
+
+        // You can return any component that you like here!
+        return <IconComponent name={iconName} size={25} color={tintColor} />;
+      },
+    }),
+  },
+);
+//App Stack
+
+const appStack = createStackNavigator(
+  {
+    Home: {screen: TabNavigator},
     Places: {screen: SelectPlace},
     SharedPlaces: {screen: SharedPlaces},
     SelectedPlace: {screen: SharedPlaceSelect},
   },
   {
-    initialRouteName: 'Home',
     defaultNavigationOptions: ({navigation}) => {
       return {
         headerTitle: navigation.state.routeName,
@@ -41,6 +73,7 @@ const appStack = createStackNavigator(
     },
   },
 );
+
 //Auth Stack
 
 const authStack = createStackNavigator(

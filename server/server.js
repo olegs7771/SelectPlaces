@@ -47,6 +47,7 @@ app.use('/api', auth);
 
 //Exercises
 
+<<<<<<< HEAD
 const nums = {
   a: 10,
   b: 20,
@@ -61,3 +62,21 @@ const sumObjValues = obj => {
 };
 
 console.log(sumObjValues(nums));
+=======
+var greeting = (() => {
+  let greetString = "Hey, that's ";
+  const greet = name => {
+    return greetString + name;
+  };
+  let changeGreeting = newGreeting => {
+    greetString = newGreeting;
+  };
+  return {
+    greet,
+    changeGreeting,
+  };
+})();
+
+console.log(greeting.greet('Oleg'));
+console.log(greeting.changeGreeting('Oleg'));
+>>>>>>> 414414b7f57a42663ea04bda8127cfa0c3cbdd18
