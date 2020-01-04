@@ -135,6 +135,7 @@ export class Login extends Component {
               ? styles.containerFormLandScape
               : styles.containerFormPortrait
           }>
+          <Text>{__DEV__}</Text>
           <TextForm
             placeholder="email"
             placeholderTextColor="#fff"
