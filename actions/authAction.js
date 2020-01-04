@@ -38,26 +38,25 @@ export const registerUser = data => dispatch => {
 //Login  User
 export const loginUser = data => dispatch => {
   console.log('data in action', data);
+  // let formBody = [];
+  // for (let key in data) {
+  //   const encodedKey = encodeURIComponent(key);
+  //   const encodedValue = encodeURIComponent(data[key]);
+  //   formBody.push(encodedKey + '=' + encodedValue);
+  // }
+  // formBody = formBody.join('&');
+  // console.log('formBody', formBody);
+
   dispatch(isLoading());
   axios
-    .post(' http://10.0.2.2:3000/api/login', data)
+    .post('http://192.168.1.11:3000/api/login', data)
     .then(res => {
       console.log('res.data', res.data);
-
-      dispatch({
-        type: LOGIN_USER,
-        payload: res.data,
-      });
     })
     .catch(err => {
-      console.log('err.response.data :', err.response.data);
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      });
+      console.log('err', err.response.data);
     });
 };
-
 //Request token in every reload with update exp
 export const auth_with_token = data => dispatch => {
   const token = JSON.parse(data.token);

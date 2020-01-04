@@ -55,7 +55,7 @@ export const getPlace = () => dispatch => {
   console.log('getting places');
   dispatch(loading());
 
-  axios.get('http://10.0.2.2:3000/api/getPlace').then(res => {
+  axios.get('http://localhost:3000/api/getPlace').then(res => {
     if (res.data.message) {
       dispatch({
         type: API_MESSAGE,

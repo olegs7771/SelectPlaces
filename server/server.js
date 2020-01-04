@@ -46,22 +46,3 @@ app.use('/api', places);
 app.use('/api', auth);
 
 //Exercises
-
-const nums = [10, -12, 30, -1, -8, 14, -33, 20];
-
-const sumPlusMinus = arr => {
-  let plus = 0;
-  let minus = 0;
-  for (let i = 0; i < arr.length; i++) {
-    const element = arr[i];
-    // console.log('element', element);
-    if (element < 0) {
-      minus = +element;
-    } else if (element > 0) {
-      plus = +element;
-    }
-  }
-  return plus, minus;
-};
-
-sumPlusMinus(nums);
